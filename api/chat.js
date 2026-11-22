@@ -3,11 +3,11 @@ import { GoogleGenAI } from "@google/genai";
 const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_FALLBACK_MODELS = ["gemini-2.5-flash-lite"];
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+const apiKey = (process.env.GEMINI_API_KEY || "").trim();
+const aiVertex = new GoogleGenAI({ vertexai: true, apiKey });
+const aiGemini = new GoogleGenAI({ apiKey });
 
-async function callGeminiOnce(model, userText, history, useSearch) {
+async function callGeminiOnce(client, model, userText, history, useSearch) {
   const hariIni = new Date().toLocaleDateString("id-ID", {
     day: "numeric",
     month: "long",
@@ -37,7 +37,7 @@ async function callGeminiOnce(model, userText, history, useSearch) {
   }
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await client.models.generateContent({
       model,
       contents,
       config,
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, reason: "method_not_allowed" });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
+  if (!apiKey) {
     return res.status(500).json({ ok: false, reason: "http_401" });
   }
 
@@ -88,15 +88,25 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, reason: "empty" });
   }
 
-  const attempts = [{ model: GEMINI_MODEL, search: true }];
-  if (GEMINI_FALLBACK_MODELS[0]) {
-    attempts.push({ model: GEMINI_FALLBACK_MODELS[0], search: true });
-  }
-  attempts.push({ model: GEMINI_MODEL, search: false });
+  const primaryClient = apiKey.startsWith("AQ.") ? aiVertex : aiGemini;
+  const secondaryClient = apiKey.startsWith("AQ.") ? aiGemini : aiVertex;
+
+  const attempts = [
+    { client: primaryClient, model: GEMINI_MODEL, search: true },
+    { client: primaryClient, model: GEMINI_MODEL, search: false },
+    { client: primaryClient, model: GEMINI_FALLBACK_MODELS[0], search: false },
+    { client: secondaryClient, model: GEMINI_MODEL, search: false },
+  ];
 
   let firstFailure = null;
   for (const attempt of attempts) {
-    const result = await callGeminiOnce(attempt.model, cleanText, history, attempt.search);
+    const result = await callGeminiOnce(
+      attempt.client,
+      attempt.model,
+      cleanText,
+      history,
+      attempt.search
+    );
     if (result.ok) {
       result.noSearch = !attempt.search;
       return res.status(200).json(result);
