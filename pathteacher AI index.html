@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathTeacher PGSD | Portal Informasi Karier Guru SD Masa Kini</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans (Utama) & Audiowide (Khusus Logo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Marked.js untuk memformat output Markdown dari AI -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Timeline */
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #e2e8f0; /* slate-200 */
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 4px;
+        }
+        .timeline-item {
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item.left {
+            left: 0;
+        }
+        .timeline-item.right {
+            left: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            right: -12px;
+            background-color: white;
+            border: 4px solid #1e40af; /* Primary: blue-800 */
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-item.right::after {
+            left: -12px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline-container::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item.left, .timeline-item.right {
+                left: 0;
+            }
+            .timeline-item.left::after, .timeline-item.right::after {
+                left: 19px;
+            }
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.appear { opacity: 1; transform: translateY(0); }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        
+        .tab-btn {
+            border-color: transparent;
+            background-color: #f8fafc;
+            color: #475569;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            background-color: #f1f5f9;
+        }
+        .tab-btn.active {
+            border-color: #0ea5e9; /* Accent: sky-500 */
+            background-color: #ffffff;
+            color: #1e40af; /* Primary: blue-800 */
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.15);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeInTab 0.5s ease-out forwards;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .accordion-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Logo Title Style */
+        .y2k-cyber-text {
+            font-family: 'Audiowide', sans-serif;
+            color: #1e40af; 
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .y2k-cyber-text-sm {
+            font-family: 'Audiowide', sans-serif;
+            color: #1e40af;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Single Tarot Card Back Design Style */
+        .single-tarot-card {
+            perspective: 1000px;
+            cursor: pointer;
+            width: 280px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .single-tarot-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .single-tarot-card.flipped .single-tarot-inner {
+            transform: rotateY(180deg);
+        }
+        .single-tarot-front, .single-tarot-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(30, 64, 175, 0.15);
+            padding: 24px;
+        }
+        .single-tarot-front {
+            background: #1e293b; 
+            color: #f8fafc;
+            border: 5px solid #1e40af;
+            background-image: 
+                radial-gradient(#1e40af 1px, transparent 1px),
+                radial-gradient(#64748b 1px, #1e293b 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+        .tarot-back-pattern {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .single-tarot-back {
+            background: white;
+            color: #1e293b;
+            transform: rotateY(180deg);
+            border: 4px solid #e2e8f0;
+        }
+        @keyframes shuffle-anim {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(8deg) scale(0.95); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        .shuffling {
+            animation: shuffle-anim 0.4s ease infinite;
+        }
+        
+        /* Media query khusus cetak (Print) */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #quiz-container, #quiz-container * {
+                visibility: visible;
+            }
+            #quiz-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                border: none;
+            }
+            #quiz-container button {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <header class="fixed w-full top-0 z-50 glass-panel shadow-sm bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-blue-800 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-md transform rotate-3">
+                        <i class="fa-solid fa-graduation-cap -rotate-3"></i>
+                    </div>
+                    <span class="y2k-cyber-text-sm text-xl md:text-2xl">PathTeacher</span>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#beranda" class="text-slate-600 hover:text-sky-500 font-bold transition-colors">Beranda</a>
+                    <a href="#minat-bakat" class="text-slate-600 hover:text-sky-500 font-bold transition-colors flex items-center gap-1"><i class="fa-solid fa-gamepad text-blue-800"></i> Tes Minat</a>
+                    <a href="#tarot-motivasi" class="text-slate-600 hover:text-sky-500 font-bold transition-colors flex items-center gap-1"><i class="fa-solid fa-wand-magic-sparkles text-blue-800"></i> Tarot Motivasi</a>
+                    <a href="#jalur-karier" class="text-slate-600 hover:text-sky-500 font-bold transition-colors">Jalur Karier</a>
+                    <a href="#peta-tahapan" class="text-slate-600 hover:text-sky-500 font-bold transition-colors">Roadmap</a>
+                    <a href="#persiapan" class="text-slate-600 hover:text-sky-500 font-bold transition-colors">Tips</a>
+                </nav>
+
+                <div class="hidden md:block">
+                    <a href="#tanya-ai" class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2.5 rounded-full font-bold transition-all shadow-lg shadow-sky-500/30 flex items-center gap-2 font-display">
+                        <i class="fa-solid fa-sparkles"></i> Tanya AI
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" aria-label="Buka Menu Navigasi" class="text-slate-600 hover:text-sky-500 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-xl">
+            <div class="px-4 pt-3 pb-4 space-y-2">
+                <a href="#beranda" class="block px-4 py-3 text-slate-700 hover:text-sky-500 font-bold rounded-2xl">Beranda</a>
+                <a href="#minat-bakat" class="block px-4 py-3 text-blue-800 font-bold bg-slate-100 rounded-2xl"><i class="fa-solid fa-gamepad mr-2"></i> Tes Minat & Bakat</a>
+                <a href="#tarot-motivasi" class="block px-4 py-3 text-slate-700 hover:text-sky-500 font-bold rounded-2xl"><i class="fa-solid fa-wand-magic-sparkles mr-2 text-blue-800"></i> Tarot Motivasi</a>
+                <a href="#jalur-karier" class="block px-4 py-3 text-slate-700 hover:text-sky-500 font-bold rounded-2xl">Jalur Karier</a>
+                <a href="#peta-tahapan" class="block px-4 py-3 text-slate-700 hover:text-sky-500 font-bold rounded-2xl">Roadmap</a>
+                <a href="#persiapan" class="block px-4 py-3 text-slate-700 hover:text-sky-500 font-bold rounded-2xl">Tips</a>
+                <a href="#tanya-ai" class="block px-4 py-3 text-white font-bold bg-sky-500 rounded-2xl mt-4 text-center"><i class="fa-solid fa-robot mr-2"></i> Tanya AI PathTeacher</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="pt-28 pb-20 lg:pt-36 lg:pb-28 bg-slate-50 relative overflow-hidden">
+        <!-- Soft Blob Backgrounds (Neutralized) -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-slate-200/40 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-slate-200/40 blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] opacity-30 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <div class="inline-block px-5 py-2 rounded-full bg-white text-blue-800 font-bold text-sm mb-6 border border-slate-200 shadow-sm font-display tracking-wide">
+                        <i class="fa-solid fa-compass mr-2 text-blue-800"></i>Portal Karier Mahasiswa PGSD
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-800 leading-tight mb-6 font-display">
+                        Persiapkan Kariermu Sebagai <span class="text-sky-500">Guru SD Profesional</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed font-medium">
+                        Website PathTeacher PGSD adalah portal informasi dan peta karier digital yang dirancang khusus untuk mahasiswa serta alumni S1 Pendidikan Guru Sekolah Dasar (PGSD). Website ini menyajikan panduan langkah demi langkah dalam menentukan arah masa depan lulusan S1 PGSD baik di sektor pemerintah maupun swasta yang dilengkapi dengan fitur interaktif seperti kuis tes minat bakat, kartu motivasi harian, panduan dokumen pendaftaran, serta asisten percakapan berbasis AI.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#minat-bakat" class="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-full font-bold text-lg text-center transition-all shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 font-display tracking-wide">
+                            Ikuti Tes Minat <i class="fa-solid fa-gamepad"></i>
+                        </a>
+                        <a href="#tarot-motivasi" class="bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-8 py-4 rounded-full font-bold text-lg text-center transition-all flex items-center justify-center gap-2 shadow-sm font-display tracking-wide">
+                            <i class="fa-solid fa-wand-magic-sparkles text-blue-800"></i> Tarot Motivasi
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative fade-in hidden lg:block">
+                    <!-- Glassmorphism Image Container -->
+                    <!-- PENGGANTI GAMBAR HERO SECTION -->
+                    <div class="relative rounded-[2rem] bg-gradient-to-br from-blue-50/80 to-white/60 backdrop-blur-xl shadow-2xl p-8 border border-white transform rotate-2 hover:rotate-0 transition-transform duration-500 h-[450px] flex flex-col items-center justify-center text-center">
+                        <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg border border-slate-100 mb-6">
+                            <i class="fa-solid fa-graduation-cap text-5xl text-blue-800"></i>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-slate-800 font-display mb-3">Siap Menjadi Pendidik?</h3>
+                        <p class="text-slate-600 font-medium px-4">Fokus pada persiapan, kembangkan kompetensi, dan temukan jalur pengabdian terbaikmu tanpa ragu.</p>
+                        
+                        <!-- Floating Badge Kiri -->
+                        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 border border-slate-100 animate-bounce">
+                            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-blue-800 text-xl font-bold transform -rotate-6">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Update Info</p>
+                                <p class="font-bold text-slate-800 font-display text-lg">Formasi Guru 2026</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Badge Kanan -->
+                        <div class="absolute top-10 -right-6 bg-white p-3 rounded-2xl shadow-lg flex items-center gap-3 border border-slate-100">
+                            <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-blue-800">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <p class="font-bold text-slate-700 text-sm pr-2">Love Teaching</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minat & Bakat Section -->
+    <section id="minat-bakat" class="py-24 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 fade-in">
+                <span class="px-5 py-2 rounded-full bg-slate-100 border border-slate-200 text-blue-800 font-bold text-xs uppercase tracking-widest mb-4 inline-block font-display">Kuis Interaktif</span>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-4 font-display">Kuis Refleksi & Jalur Karier Guru SD</h3>
+                <p class="text-slate-600 text-base md:text-lg max-w-2xl mx-auto font-medium">
+                    Setiap pendidik memiliki jalur karier masing-masing bisa melalui jalur CPNS, pengangkatan PPPK, maupun institusi pendidikan Internasional. Pastikan Anda merencanakan langkah yang tepat sedini mungkin. 
+                    Jawab 10 pertanyaan terarah berikut untuk memetakan potensi diri Anda secara objektif, lalu temukan ekosistem kerja yang paling sempurna untuk mewujudkan visi Anda di dunia pendidikan.
+                </p>
+            </div>
+
+            <div id="quiz-container" class="glass-panel bg-white/60 rounded-[2.5rem] shadow-[0_20px_50px_rgba(30,64,175,0.05)] border border-slate-200 p-6 md:p-10 fade-in">
+                
+                <!-- Audio Element untuk BGM Kuis -->
+                <audio id="quiz-bgm" loop>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                </audio>
+
+                <!-- Intro Quiz -->
+                <div id="quiz-intro" class="text-center py-8">
+                    <div class="w-24 h-24 bg-slate-100 rounded-[2rem] flex items-center justify-center text-blue-800 text-4xl mx-auto mb-6 shadow-sm border border-white">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-slate-800 mb-3 font-display">Temukan Jalur Karier yang Sesuai untuk Kamu</h4>
+                    <p class="text-slate-600 max-w-md mx-auto mb-8 text-sm md:text-base font-medium">
+                        Kuis ini hanya membutuhkan waktu sekitar 2 menit. Kemajuanmu akan disimpan otomatis.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="startQuiz(false)" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-sky-500/20 transition-all transform hover:scale-105 active:scale-95 text-base inline-flex items-center justify-center gap-3 font-display tracking-wide">
+                            <span id="btn-quiz-text">Mulai Kuis Sekarang</span>
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <button id="btn-reset-saved" onclick="startQuiz(true)" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-4 rounded-full transition-all items-center justify-center gap-2 font-display">
+                            <i class="fa-solid fa-rotate-right"></i> Ulangi dari Awal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Soal Quiz -->
+                <div id="quiz-questions-screen" class="hidden">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                        <span id="quiz-counter" class="text-xs font-bold text-blue-800 bg-slate-100 border border-slate-200 px-4 py-1.5 rounded-full font-display">Pertanyaan 1/10</span>
+                        <span id="quiz-progress-text" class="text-xs font-bold text-slate-400">10%</span>
+                    </div>
+
+                    <div class="w-full bg-slate-100 h-3 rounded-full mb-8 overflow-hidden border border-slate-200/50">
+                        <div id="quiz-progress-bar" class="bg-sky-500 h-full rounded-full transition-all duration-300" style="width: 10%"></div>
+                    </div>
+
+                    <h4 id="quiz-question-title" class="text-xl md:text-2xl font-bold text-slate-800 mb-6 leading-snug font-display">Pertanyaan akan muncul di sini...</h4>
+
+                    <div id="quiz-options-list" class="space-y-3 font-medium"></div>
+                </div>
+
+                <!-- Hasil Quiz -->
+                <div id="quiz-result-screen" class="hidden text-center py-6">
+                    <div class="w-24 h-24 bg-slate-100 text-blue-800 rounded-[2rem] flex items-center justify-center text-4xl mx-auto mb-6 shadow-sm border border-white">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <span class="text-xs font-bold px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-blue-800 mb-3 inline-block font-display">Hasil Analisis Jalur Karier</span>
+                    <h4 id="result-title" class="text-3xl font-extrabold text-slate-800 mb-3 font-display">Jalur Karier Anda</h4>
+                    <p id="result-description" class="text-slate-600 text-base max-w-lg mx-auto mb-8 leading-relaxed font-medium">
+                        Deskripsi hasil akan muncul di sini...
+                    </p>
+
+                    <div class="bg-white/80 border border-slate-200 p-6 rounded-3xl mb-8 text-left relative overflow-hidden shadow-sm">
+                        <div class="absolute -right-4 -bottom-8 text-slate-100 text-8xl font-display pointer-events-none">“</div>
+                        <h5 class="font-bold text-blue-800 text-sm uppercase tracking-wider mb-2 flex items-center gap-2 font-display"><i class="fa-solid fa-sparkles text-blue-800"></i> Kutipan untuk Kamu</h5>
+                        <p id="result-quote" class="text-slate-700 italic text-sm md:text-base leading-relaxed font-medium">"Pesan motivasi..."</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 flex-wrap">
+                        <a id="result-action-btn" href="#jalur-karier" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-6 py-4 rounded-full shadow-md transition-all flex items-center justify-center gap-2 font-display tracking-wide transform hover:scale-105">
+                            <span>Lihat Detail Jalurnya</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <button onclick="cetakHasilKuis()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-4 rounded-full transition-all flex items-center justify-center gap-2 font-display shadow-md">
+                            <i class="fa-solid fa-print"></i> Unduh / Cetak Hasil
+                        </button>
+                        <button onclick="startQuiz(true)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-4 rounded-full transition-all flex items-center justify-center gap-2 font-display">
+                            <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Kartu Motivasi -->
+    <section id="kartu-motivasi" class="py-24 bg-slate-50 border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mb-12 fade-in">
+                <span class="px-5 py-2 rounded-full bg-white border border-slate-200 text-blue-800 font-bold text-xs uppercase tracking-widest mb-4 inline-block font-display shadow-sm">Kartu Motivasi</span>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-4 font-display">Ambil Satu Kartu Motivasi Hari Ini</h3>
+                <p class="text-slate-600 text-base md:text-lg max-w-2xl mx-auto font-medium">
+                    Kocok kartu untuk memunculkan satu pesan motivasi pengembangan diri sebagai calon pendidik.
+                </p>
+            </div>
+
+            <!-- Single Tarot Card with Classic Back Pattern -->
+            <div class="fade-in mb-8">
+                <div id="single-tarot-card" class="single-tarot-card" onclick="flipSingleCard()">
+                    <div id="single-tarot-inner" class="single-tarot-inner">
+                        <!-- Sisi Depan -->
+                        <div class="single-tarot-front">
+                            <div class="tarot-back-pattern">
+                                <div class="w-14 h-14 rounded-full bg-blue-900/25 flex items-center justify-center text-slate-200 text-2xl mb-3 border border-blue-400/40">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <h4 class="text-lg font-bold font-display uppercase tracking-widest text-slate-200 mb-1">PathTeacher</h4>
+                                <p class="text-[10px] text-slate-300 font-medium tracking-wide">Tarot Pengembang Diri & Guru</p>
+                                <div class="mt-4 text-xs bg-white/10 px-4 py-1.5 rounded-full border border-white/20 text-white font-bold">Ketuk untuk Membuka</div>
+                            </div>
+                        </div>
+                        <!-- Sisi Belakang -->
+                        <div class="single-tarot-back text-center">
+                            <span id="tarot-badge" class="text-[10px] font-bold px-3 py-1 rounded-full bg-sky-100 text-blue-800 uppercase tracking-widest mb-3 border border-sky-200 font-display">
+                                Inspirasi Pendidik
+                            </span>
+                            <h4 id="tarot-word" class="text-base md:text-lg font-bold text-slate-800 mb-3 font-display italic leading-snug">
+                                "Kocok Kartu untuk Memulai"
+                            </h4>
+                            <p id="tarot-desc" class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed px-2 border-t border-slate-100 pt-3">
+                                Temukan kata-kata motivasi untuk perjalananmu sebagai calon pendidik.
+                            </p>
+                            <span class="text-[9px] text-slate-400 font-bold mt-4 uppercase tracking-widest">8 Unsur A.M. Sardiman</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Kocok Kartu -->
+            <div class="fade-in">
+                <button onclick="shuffleSingleTarot()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-sky-500/20 transition-all transform hover:scale-105 active:scale-95 text-base inline-flex items-center gap-3 font-display tracking-wide">
+                    <i class="fa-solid fa-shuffle" id="shuffle-icon"></i>
+                    <span>Kocok & Ambil 1 Kartu Baru</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jalur Karier Section -->
+    <section id="jalur-karier" class="py-24 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14 fade-in">
+                <h2 class="text-sm font-bold text-blue-800 uppercase tracking-wide mb-2 font-display">Pilihan Masa Depan</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 font-display">Eksplorasi Jalur Karier Utama</h3>
+                <p class="text-slate-600 text-lg font-medium">Pilih jalur yang paling sesuai dengan hasil kuis atau minatmu.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                
+                <!-- Sidebar Tabs -->
+                <div class="lg:w-1/4 w-full flex flex-col gap-3 fade-in sticky top-28 z-10">
+                    <button onclick="openTab('cpns')" id="btn-cpns" class="tab-btn active w-full text-left px-6 py-5 rounded-3xl border-l-4 font-bold relative overflow-hidden group shadow-sm">
+                        <span class="relative z-10 flex items-center gap-4"><i class="fa-solid fa-building-columns text-2xl w-8 text-center text-blue-800"></i> <span class="text-lg font-display">Guru CPNS</span></span>
+                    </button>
+                    
+                    <button onclick="openTab('pppk')" id="btn-pppk" class="tab-btn font-medium w-full text-left px-6 py-5 rounded-3xl border-l-4 relative overflow-hidden group shadow-sm">
+                        <span class="relative z-10 flex items-center gap-4"><i class="fa-solid fa-file-signature text-2xl w-8 text-center text-blue-800"></i> <span class="text-lg font-display">Guru PPPK</span></span>
+                    </button>
+                    
+                    <button onclick="openTab('swasta')" id="btn-swasta" class="tab-btn font-medium w-full text-left px-6 py-5 rounded-3xl border-l-4 relative overflow-hidden group shadow-sm">
+                        <span class="relative z-10 flex items-center gap-4"><i class="fa-solid fa-globe text-2xl w-8 text-center text-blue-800"></i> <span class="text-lg font-display">Sekolah Internasional</span></span>
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="lg:w-3/4 w-full fade-in" style="transition-delay: 100ms;">
+                    
+                    <!-- TAB 1: CPNS -->
+                    <div id="content-cpns" class="tab-content active glass-panel bg-white rounded-[2.5rem] shadow-xl p-8 md:p-10 border border-slate-100">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 text-blue-800 text-3xl mb-6 shadow-sm border border-slate-200">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <h3 class="text-3xl font-extrabold text-slate-800 mb-4 font-display">Guru CPNS (Pegawai Negeri Sipil)</h3>
+                        
+                        <!-- Waktu Pelaksanaan -->
+                        <div class="mb-8 bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm">
+                            <h4 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2 font-display">
+                                <i class="fa-solid fa-calendar-days"></i> Kapan Seleksi Dibuka?
+                            </h4>
+                            <p class="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
+                                Berdasarkan tren historis, BKN biasanya membuka pendaftaran pada <strong>pertengahan tahun (Juli-Agustus)</strong>, dengan tes SKD dan SKB di akhir tahun. *Ini pola historis ya, untuk jadwal resminya tetap tunggu pengumuman KemenPAN-RB !*
+                            </p>
+                                <!-- BUBBLE INFO UPDATE CPNS 2027 -->
+                            <div class="mb-10 relative bg-gradient-to-br from-blue-50 to-white p-6 rounded-3xl border border-blue-200 shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+                                <!-- Efek cahaya dekoratif di pojok -->
+                                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-100 rounded-full opacity-60 blur-xl pointer-events-none"></div>
+                                
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-10 h-10 rounded-full bg-white text-blue-800 flex items-center justify-center text-lg shadow-sm border border-blue-200">
+                                            <i class="fa-solid fa-bullhorn animate-pulse"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] font-bold text-sky-500 uppercase tracking-widest font-display">Update Terkini</span>
+                                            <h4 class="text-lg font-bold text-blue-900 font-display leading-tight">Tren Formasi CPNS Guru 2027</h4>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-sm text-slate-700 leading-relaxed mb-5 font-medium">
+                                        Pemerintah melalui Kemendikdasmen dan KemenpanRB memastikan akan ada seleksi CPNS Guru besar-besaran mulai awal tahun 2027. Berikut rincian utamanya:
+                                    </p>
+                                    
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-blue-100 shadow-sm">
+                                            <i class="fa-solid fa-circle-check text-sky-500 mt-0.5"></i>
+                                            <span><strong>Kebutuhan Kuota Masif:</strong> Target rekrutmen hingga 464.000 guru CPNS untuk menutup defisit tenaga pendidik, khususnya di wilayah 3T (Tertinggal, Terdepan dan Terluar).</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-blue-100 shadow-sm">
+                                            <i class="fa-solid fa-circle-check text-sky-500 mt-0.5"></i>
+                                            <span><strong>Open Recruitment:</strong> Terbuka luas untuk guru honorer, lulusan baru (<em>fresh graduate</em>), dan pelamar yang belum memiliki Serdik (Non-PPG).</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-blue-100 shadow-sm">
+                                            <i class="fa-solid fa-circle-check text-sky-500 mt-0.5"></i>
+                                            <span><strong>Peluang PPPK Naik Kelas:</strong> Guru berstatus PPPK diizinkan mendaftar CPNS 2027. Jika tidak lolos, status PPPK dipastikan tetap aman.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-blue-100 shadow-sm">
+                                            <i class="fa-solid fa-circle-check text-sky-500 mt-0.5"></i>
+                                            <span><strong>Pengangkatan PPPK Paruh Waktu:</strong> Sekitar 242.000 guru PPPK paruh waktu otomatis dinaikkan statusnya menjadi penuh waktu per 1 Januari 2027.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- END BUBBLE INFO UPDATE -->
+                        </div>
+
+                        <!-- Konteks Gambar / Visual CPNS -->
+                        <div class="mb-10">
+                            <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-eye text-blue-800"></i> Fokus Tahapan CPNS</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- Kartu 1: Detail Tahap SKD (Seleksi Kompetensi Dasar) (Memadukan Animasi + List Detail) -->
+                                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+                                    <div>
+                                        <!-- Animasi Visual SKD -->
+                                        <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center border border-slate-200/50 group-hover:scale-[1.02] transition-transform duration-300 mb-5">
+                                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-blue-100">
+                                                <i class="fa-solid fa-desktop text-3xl text-blue-800"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Header Detail -->
+                                        <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                                            <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                                                <i class="fa-solid fa-desktop text-xl text-blue-800"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Tahap Awal</span>
+                                                <h5 class="font-bold text-slate-800 text-sm mt-1">Seleksi Kompetensi Dasar (SKD)</h5>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                                            Peserta mengerjakan soal menggunakan komputer (Computer Assisted Test). Skor langsung ditampilkan secara real-time setelah waktu tes habis, sehingga prosesnya transparan.
+                                        </p>
+                                        
+                                        <!-- Poin-poin Format Ujian (Icon List) -->
+                                        <ul class="space-y-3 mb-5">
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                                                    <i class="fa-solid fa-shield-halved text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Keamanan & Live Score:</strong> Menggunakan <em>Computer Assisted Test</em> (CAT) dari BKN (Badan Kepegawaian Negara). Dilengkapi <em>Face Recognition</em> saat registrasi dan nilai disiarkan langsung via YouTube.
+                                                </p>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                                                    <i class="fa-solid fa-list-check text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Tiga Subtes Utama:</strong> Ujian ini terdiri dari Tes Wawasan Kebangsaan (TWK), Tes Intelegensia Umum (TIU), dan Tes Karakteristik Pribadi (TKP).
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Kotak Sorotan Khusus -->
+                                    <div class="bg-gradient-to-br from-sky-50 to-blue-50 p-4 rounded-2xl border border-sky-200 shadow-sm relative overflow-hidden mt-auto">
+                                        <i class="fa-solid fa-chart-line absolute -right-2 -bottom-2 text-6xl text-sky-500/10"></i>
+                                        <div class="relative z-10 flex items-start gap-3">
+                                            <i class="fa-solid fa-bullseye text-sky-500 text-base mt-0.5 animate-pulse"></i>
+                                            <div>
+                                                <strong class="text-xs md:text-sm text-sky-900 block mb-1">Target Nilai Ambang Batas</strong>
+                                                <p class="text-[11px] md:text-xs text-sky-800 font-medium leading-relaxed">
+                                                    Fokus utama di tahap ini bukan sekadar meraih skor total tertinggi, melainkan peserta <strong>wajib menembus <em>Passing Grade</em></strong> yang telah ditetapkan pada masing-masing subtes.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kartu 2: Detail Tahap SKB (Seleksi Kompetensi Bidang) (Memadukan Animasi + List Detail) -->
+                                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+                                    <div>
+                                        <!-- Animasi Visual SKB -->
+                                        <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center border border-slate-200/50 group-hover:scale-[1.02] transition-transform duration-300 mb-5">
+                                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-blue-100">
+                                                <i class="fa-solid fa-users-viewfinder text-3xl text-blue-800"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Header Detail -->
+                                        <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                                            <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                                                <i class="fa-solid fa-users-viewfinder text-xl text-blue-800"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Tahap Lanjutan</span>
+                                                <h5 class="font-bold text-slate-800 text-sm mt-1">Seleksi Kompetensi Bidang (SKB)</h5>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                                            Setelah lolos SKD, peserta akan diuji sesuai bidang keahlian, dapat berupa tes praktik mengajar (microteaching) atau wawancara langsung dengan pejabat daerah.
+                                        </p>
+
+                                        <!-- Poin-poin Format Ujian (Icon List) -->
+                                        <ul class="space-y-3 mb-5">
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                                                    <i class="fa-solid fa-desktop text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">SKB CAT BKN:</strong> Menilai secara spesifik kompetensi pedagogik dan profesionalisme guru di kelas menggunakan sistem komputer.
+                                                </p>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                                                    <i class="fa-solid fa-chalkboard-user text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">SKB Tambahan (Opsional):</strong> Instansi/Pemda berhak mengadakan tes praktik mengajar (<em>microteaching</em>), uji psikologi, dan wawancara.
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Kotak Sorotan Khusus -->
+                                    <div class="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-2xl border border-amber-200 shadow-sm relative overflow-hidden mt-auto">
+                                        <i class="fa-solid fa-award absolute -right-3 -bottom-3 text-6xl text-amber-500/10"></i>
+                                        <div class="relative z-10 flex items-start gap-3">
+                                            <i class="fa-solid fa-star text-amber-500 text-base mt-0.5 animate-pulse"></i>
+                                            <div>
+                                                <strong class="text-xs md:text-sm text-amber-900 block mb-1">Privilege Pemilik Serdik</strong>
+                                                <p class="text-[11px] md:text-xs text-amber-800 font-medium leading-relaxed">
+                                                    Pelamar dengan Sertifikat Pendidik linier yang terdaftar di Kemendikbudristek otomatis mendapat <strong>afirmasi nilai maksimal (100%)</strong> pada komponen SKB CAT.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- Map Horizontal -->
+                        <div class="mb-10 bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm">
+                            <h4 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 font-display"><i class="fa-solid fa-route text-blue-800"></i> Alur Tahapan Resmi</h4>
+                            <div class="relative w-full overflow-x-auto pb-6 custom-scrollbar">
+                                <div class="min-w-[800px] flex justify-between relative px-4">
+                                    <div class="absolute top-6 left-12 right-12 h-1.5 bg-slate-200 rounded-full z-0"></div>
+                                    
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">1</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Daftar Akun</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">SSCASN BKN</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">2</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Tes SKD</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">TWK, TIU, TKP</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">3</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Tes SKB</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Ujian Bidang</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">4</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Integrasi</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Skor SKD + SKB</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-blue-800 text-white flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-200"><i class="fa-solid fa-flag-checkered"></i></div>
+                                        <h5 class="font-bold text-sm text-slate-800">Pemberkasan</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Dapat NIP PNS!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kiat Lolos (Multiple) -->
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-lightbulb text-blue-800"></i> Tips & Trik Tembus CPNS</h4>
+                            <div class="flex flex-col gap-3">
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('cpns-acc-1')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">1. Formasi Linier Selain Guru Kelas</span>
+                                        <i id="icon-cpns-acc-1" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="cpns-acc-1" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Ijazah PGSD tidak selalu harus digunakan untuk mengajar di kelas. Kamu juga bisa melamar formasi pendukung seperti Analis Kurikulum, Pengembang Penilaian Pendidikan, atau Penyuluh Bahasa di berbagai kementerian.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('cpns-acc-2')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">2. Manfaat Sertifikat Pendidik (Serdik)</span>
+                                        <i id="icon-cpns-acc-2" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="cpns-acc-2" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Lulusan PPG Prajabatan yang memiliki Serdik linier otomatis mendapat nilai SKB maksimal (poin 100). Ini menjadi nilai tambah yang signifikan dibanding peserta lain.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('cpns-acc-3')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">3. Strategi Mengerjakan Soal SKD</span>
+                                        <i id="icon-cpns-acc-3" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="cpns-acc-3" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Kerjakan bagian TKP (Tes Karakteristik Pribadi) terlebih dahulu. Soalnya cukup panjang dan membutuhkan konsentrasi, namun tidak ada jawaban yang bernilai 0 (rentang nilai 1-5 poin).</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: PPPK -->
+                    <div id="content-pppk" (Pegawai Pemerintah dengan Perjanjian Kerja)" class="tab-content glass-panel bg-white rounded-[2.5rem] shadow-xl p-8 md:p-10 border border-slate-100">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 text-blue-800 text-3xl mb-6 shadow-sm border border-slate-200">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+                        <h3 class="text-3xl font-extrabold text-slate-800 mb-4 font-display">Guru PPPK (Pegawai Pemerintah)</h3>
+                        
+                        <div class="mb-8 bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm">
+                            <h4 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2 font-display">
+                                <i class="fa-solid fa-calendar-days"></i> Kapan Seleksi Dibuka?
+                            </h4>
+                            <p class="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
+                                Biasanya dibuka beriringan atau tak lama setelah pendaftaran CPNS <strong>(sekitar Agustus - Oktober)</strong>. PPPK sangat difokuskan untuk memenuhi kebutuhan guru yang siap kerja (banyak formasi buat honorer dan lulusan PPG).
+                            </p>
+                            <!-- BUBBLE INFO UPDATE PPPK & PPG -->
+                            <div class="mb-10 relative bg-gradient-to-br from-slate-50 to-white p-6 rounded-3xl border border-sky-200 shadow-sm overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+                                <!-- Efek cahaya dekoratif -->
+                                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-sky-100 rounded-full opacity-60 blur-xl pointer-events-none"></div>
+                                
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-10 h-10 rounded-full bg-white text-sky-500 flex items-center justify-center text-lg shadow-sm border border-sky-200">
+                                            <i class="fa-solid fa-calendar-check animate-pulse"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] font-bold text-sky-500 uppercase tracking-widest font-display">Info Jadwal Penting</span>
+                                            <h4 class="text-lg font-bold text-slate-800 font-display leading-tight">Detail Tahapan PPPK & Siklus PPG</h4>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-sm text-slate-700 leading-relaxed mb-5 font-medium">
+                                        Biasanya seleksi dibuka tak lama setelah pendaftaran CPNS <strong>(Agustus - Oktober)</strong>. PPPK sangat difokuskan untuk memenuhi kebutuhan guru siap kerja. Berikut pola penjadwalan terbarunya:
+                                    </p>
+                                    
+                                    <div class="space-y-4">
+                                        <!-- Skema PPPK -->
+                                        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:border-sky-300 transition-colors">
+                                            <h5 class="text-sm font-bold text-blue-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-file-signature text-sky-500"></i> Sistem Tahapan PPPK</h5>
+                                            <ul class="space-y-2 text-xs md:text-sm text-slate-600 font-medium">
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-angle-right text-sky-500 mt-1"></i> 
+                                                    <span><strong>Tahap 1 (Oktober):</strong> Diprioritaskan untuk pelamar bersyarat khusus (eks honorer K2 dan tenaga non-ASN yang terdaftar di BKN).</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-angle-right text-sky-500 mt-1"></i> 
+                                                    <span><strong>Tahap 2 (November - Desember):</strong> Dibuka untuk pelamar umum, termasuk lulusan baru yang sudah memiliki sertifikat PPG.</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <!-- Skema PPG -->
+                                        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:border-sky-300 transition-colors">
+                                            <h5 class="text-sm font-bold text-blue-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-sky-500"></i> Jadwal Rutin PPG per Tahun</h5>
+                                            <ul class="space-y-2 text-xs md:text-sm text-slate-600 font-medium">
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-angle-right text-sky-500 mt-1"></i> 
+                                                    <span><strong>PPG Prajabatan:</strong> Pendaftaran umumnya dibuka pada <strong>Juni - Juli</strong>. Orientasi dan perkuliahan akan dimulai pada bulan September atau Oktober.</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-angle-right text-sky-500 mt-1"></i> 
+                                                    <span><strong>PPG Dalam Jabatan (Daljab):</strong> Pendaftaran dilaksanakan lebih awal dibandingkan prajabatan, biasanya sekitar bulan <strong>Maret - April</strong>.</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BUBBLE INFO UPDATE PPPK & PPG -->
+                        </div>
+
+                        <!-- Konteks Gambar / Visual PPPK -->
+                        <div class="mb-10">
+                            <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-eye text-sky-500"></i> Fokus Tahapan PPPK</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- Kartu 1: Detail Tahap Administrasi PPPK (Dipadukan Animasi) -->
+                                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+                                    <div>
+                                        <!-- Animasi Verval -->
+                                        <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-sky-50 flex items-center justify-center border border-slate-200/50 relative overflow-hidden mb-5 group-hover:scale-[1.02] transition-transform duration-300">
+                                            <div class="absolute top-0 left-0 w-24 h-24 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-pulse"></div>
+                                            <div class="absolute bottom-0 right-0 w-20 h-20 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-pulse" style="animation-delay: 1.5s;"></div>
+                                            <div class="relative z-10 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-sky-100">
+                                                <i class="fa-solid fa-server text-3xl text-sky-500 animate-pulse" style="animation-duration: 2s;"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Header Detail -->
+                                        <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                                            <div class="w-10 h-10 bg-sky-50 rounded-xl flex items-center justify-center border border-sky-100">
+                                                <i class="fa-solid fa-id-card-clip text-xl text-sky-500"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-sky-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Tahap Awal (Verval)</span>
+                                                <h5 class="font-bold text-slate-800 text-sm mt-1">Validasi Data & Administrasi</h5>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                                            Tahap krusial. Bagi tenaga honorer, data di Info GTK (Guru dan Tenaga Kependidikan) harus berstatus valid dan sinkron dengan ijazah kampus. Jika terdapat kesalahan, pendaftaran bisa gagal di tahap administrasi.
+                                        </p>
+                                        
+                                        <ul class="space-y-3 mb-5">
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-500">
+                                                    <i class="fa-solid fa-database text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Sinkronisasi Dapodik:</strong> Data Guru dan Tenaga Kependidikan (GTK) di Data Pokok Pendidikan (Dapodik) wajib valid dan terhubung dengan ijazah S1 di Pangkalan Data Pendidikan Tinggi (PDDIKTI).
+                                                </p>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-500">
+                                                    <i class="fa-solid fa-file-signature text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Integrasi SSCASN:</strong> Portal pendaftaran Sistem Seleksi CASN milik BKN mensyaratkan kecocokan Nomor Induk Kependudukan (NIK) dari Dukcapil.
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Kotak Sorotan -->
+                                    <div class="bg-gradient-to-br from-rose-50 to-red-50 p-4 rounded-2xl border border-rose-200 shadow-sm relative overflow-hidden mt-auto">
+                                        <i class="fa-solid fa-triangle-exclamation absolute -right-2 -bottom-2 text-6xl text-rose-500/10"></i>
+                                        <div class="relative z-10 flex items-start gap-3">
+                                            <i class="fa-solid fa-circle-exclamation text-rose-500 text-base mt-0.5 animate-pulse"></i>
+                                            <div>
+                                                <strong class="text-xs md:text-sm text-rose-900 block mb-1">Status Prioritas & Risiko Fatal</strong>
+                                                <p class="text-[11px] md:text-xs text-rose-800 font-medium leading-relaxed">
+                                                    Tahap ini sangat krusial! Masa pengabdian di Dapodik menentukan apakah Anda masuk <strong>Kategori Prioritas (Khusus)</strong> atau Pelamar Umum. Kesalahan data dapat berujung gagal di awal administrasi.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kartu 2: Detail Ujian Kompetensi PPPK (Dipadukan Animasi) -->
+                                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+                                    <div>
+                                        <!-- Animasi Ujian -->
+                                        <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-sky-50 flex items-center justify-center border border-slate-200/50 relative overflow-hidden mb-5 group-hover:scale-[1.02] transition-transform duration-300">
+                                            <div class="absolute top-0 right-0 w-24 h-24 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-pulse"></div>
+                                            <div class="absolute bottom-0 left-0 w-20 h-20 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-pulse" style="animation-delay: 1s;"></div>
+                                            <div class="relative z-10 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-sky-100">
+                                                <i class="fa-solid fa-laptop-file text-3xl text-sky-500 animate-bounce" style="animation-duration: 3s;"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Header Detail -->
+                                        <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                                            <div class="w-10 h-10 bg-sky-50 rounded-xl flex items-center justify-center border border-sky-100">
+                                                <i class="fa-solid fa-person-chalkboard text-xl text-sky-500"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-[10px] font-bold text-sky-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Tahap Penentu</span>
+                                                <h5 class="font-bold text-slate-800 text-sm mt-1">Ujian Kompetensi & Wawancara</h5>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                                            Berbeda dengan CPNS yang menguji wawasan kebangsaan, PPPK lebih banyak menguji studi kasus mengajar (pedagogik) dan cara menangani masalah di kelas.
+                                        </p>
+                                        
+                                        <ul class="space-y-3 mb-5">
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-500">
+                                                    <i class="fa-solid fa-brain text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Kompetensi Teknis (SJT):</strong> Didominasi oleh <em>Situational Judgement Test</em> (SJT) berupa studi kasus nyata di kelas untuk menguji respons pedagogik berpusat pada murid.
+                                                </p>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="mt-0.5 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center flex-shrink-0 text-sky-500">
+                                                    <i class="fa-solid fa-people-group text-[10px]"></i>
+                                                </div>
+                                                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                                                    <strong class="text-slate-800">Manajerial & Sosial Kultural:</strong> Menguji kemampuan kepemimpinan, pengorganisasian, empati, serta toleransi dalam menghadapi keragaman masyarakat.
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Kotak Sorotan -->
+                                    <div class="bg-gradient-to-br from-emerald-50 to-green-50 p-4 rounded-2xl border border-emerald-200 shadow-sm relative overflow-hidden mt-auto">
+                                        <i class="fa-solid fa-check-to-slot absolute -right-2 -bottom-2 text-6xl text-emerald-500/10"></i>
+                                        <div class="relative z-10 flex items-start gap-3">
+                                            <i class="fa-solid fa-gavel text-emerald-500 text-base mt-0.5 animate-pulse"></i>
+                                            <div>
+                                                <strong class="text-xs md:text-sm text-emerald-900 block mb-1">Wawancara CAT & Ambang Batas</strong>
+                                                <p class="text-[11px] md:text-xs text-emerald-800 font-medium leading-relaxed">
+                                                    Tahap wawancara dilakukan secara tertulis melalui sistem komputer untuk menilai integritas dan moralitas. Seluruh komponen ujian memiliki <strong>Nilai Ambang Batas (Passing Grade)</strong> yang wajib dipenuhi.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Map Horizontal -->
+                        <div class="mb-10 bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm">
+                            <h4 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 font-display"><i class="fa-solid fa-route text-blue-800"></i> Alur Tahapan PPPK</h4>
+                            <div class="relative w-full overflow-x-auto pb-6 custom-scrollbar">
+                                <div class="min-w-[800px] flex justify-between relative px-4">
+                                    <div class="absolute top-6 left-12 right-12 h-1.5 bg-slate-200 rounded-full z-0"></div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">1</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Cek Dapodik</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Validasi Info GTK</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">2</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Daftar SSCASN</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Pilih Formasi</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">3</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Komp. Teknis</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Soal Pedagogik</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">4</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Manajerial</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Wawancara Sistem</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-blue-800 text-white flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-200"><i class="fa-solid fa-handshake"></i></div>
+                                        <h5 class="font-bold text-sm text-slate-800">Penetapan SK</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Resmi ASN PPPK</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-lightbulb text-blue-800"></i> Tips & Trik Tembus PPPK</h4>
+                            <div class="flex flex-col gap-3">
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('pppk-acc-1')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">1. Rajin Cek Verval Ijazah</span>
+                                        <i id="icon-pppk-acc-1" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="pppk-acc-1" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Bagi kamu yang sudah berstatus honorer, pastikan rutin memeriksa <em>info.gtk.kemdikbud.go.id</em> dan memastikan status ijazah S1 PGSD sinkron dengan PDDikti. Banyak peserta gagal mendaftar hanya karena masalah administrasi ini.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('pppk-acc-2')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">2. Pola Pikir Jawaban Pedagogik</span>
+                                        <i id="icon-pppk-acc-2" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="pppk-acc-2" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Saat tes teknis PPPK, soal umumnya menanyakan solusi atas masalah di kelas. Pilih jawaban yang bersifat <strong>student centered</strong> (berpusat pada kebutuhan murid) dan komunikatif, serta hindari opsi yang bersifat hukuman fisik atau otoriter.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Swasta Internasional -->
+                    <div id="content-swasta" class="tab-content glass-panel bg-white rounded-[2.5rem] shadow-xl p-8 md:p-10 border border-slate-100">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 text-blue-800 text-3xl mb-6 shadow-sm border border-slate-200">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h3 class="text-3xl font-extrabold text-slate-800 mb-4 font-display">Sekolah Swasta Internasional</h3>
+                        
+                        <div class="mb-8 bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm">
+                            <h4 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2 font-display">
+                                <i class="fa-solid fa-calendar-days"></i> Kapan Seleksi Dibuka?
+                            </h4>
+                            <p class="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
+                                Tidak ada jadwal terpusat. Sekolah internasional umumnya membuka rekrutmen sekitar <strong>3-5 bulan sebelum tahun ajaran baru (Januari - April)</strong>. Kamu perlu proaktif memantau LinkedIn atau halaman karier resmi sekolah tersebut.
+                            </p>
+                            <!-- BUBBLE INFO UPDATE SEKOLAH INTERNASIONAL (SPK) -->
+                            <div class="mb-10 relative bg-gradient-to-br from-indigo-50 to-white p-6 rounded-3xl border border-indigo-200 shadow-sm overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+                                <!-- Efek cahaya dekoratif -->
+                                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-100 rounded-full opacity-60 blur-xl pointer-events-none"></div>
+                                
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-10 h-10 rounded-full bg-white text-indigo-600 flex items-center justify-center text-lg shadow-sm border border-indigo-200">
+                                            <i class="fa-solid fa-earth-asia animate-pulse"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest font-display">Info & Kebijakan</span>
+                                            <h4 class="text-lg font-bold text-slate-800 font-display leading-tight">Rekrutmen & Aturan SPK</h4>
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-sm text-slate-700 leading-relaxed mb-5 font-medium">
+                                        Tidak ada jadwal terpusat. Rekrutmen umumnya dibuka <strong>3-5 bulan sebelum tahun ajaran baru (Januari - April)</strong>. Selain itu, terdapat kebijakan Kemendikbudristek terkait Satuan Pendidikan Kerjasama (SPK) yang wajib dipahami guru:
+                                    </p>
+                                    
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-indigo-100 shadow-sm">
+                                            <i class="fa-solid fa-check-circle text-indigo-500 mt-0.5"></i>
+                                            <span><strong>Perubahan Status:</strong> Sekolah yang dulunya berlabel "internasional" kini wajib mengubah statusnya menjadi SPK (Satuan Pendidikan Kerjasama).</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-indigo-100 shadow-sm">
+                                            <i class="fa-solid fa-check-circle text-indigo-500 mt-0.5"></i>
+                                            <span><strong>Peluang Kuota WNI (Min. 30%):</strong> Sekolah SPK wajib memiliki tenaga pendidik WNI minimal 30% dari total guru, dengan syarat minimal bergelar S1.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-indigo-100 shadow-sm">
+                                            <i class="fa-solid fa-check-circle text-indigo-500 mt-0.5"></i>
+                                            <span><strong>Kurikulum Ganda:</strong> SPK memadukan kurikulum internasional (seperti Cambridge/IB) dengan kurikulum nasional secara bersamaan.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3 text-sm text-slate-600 font-medium bg-white p-3 rounded-xl border border-indigo-100 shadow-sm">
+                                            <i class="fa-solid fa-check-circle text-indigo-500 mt-0.5"></i>
+                                            <span><strong>Muatan Mapel Wajib:</strong> Wajib mengajar Agama, B. Indonesia, & PPKn (untuk murid WNI), serta B. Indonesia & Budaya Lokal (untuk murid WNA).</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- END BUBBLE INFO UPDATE SPK -->
+                        </div>
+<!-- Konteks Gambar / Visual Swasta Internasional -->
+<div class="mb-10">
+    <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-eye text-indigo-500"></i> Fokus Rekrutmen Global</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Kartu 1: Detail Panel Interview SPK -->
+        <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+                <!-- Animasi Visual Interview -->
+                <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-indigo-50 flex items-center justify-center border border-slate-200/50 group-hover:scale-[1.02] transition-transform duration-300 mb-5">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100">
+                        <i class="fa-solid fa-user-tie text-3xl text-indigo-500"></i>
+                    </div>
+                </div>
+
+                <!-- Header Detail -->
+                <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                        <i class="fa-solid fa-user-tie text-xl text-indigo-500"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-indigo-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Tahap Kritis</span>
+                        <h5 class="font-bold text-slate-800 text-sm mt-1">Panel Interview (BEI)</h5>
+                    </div>
+                </div>
+
+                <!-- Deskripsi Utama -->
+                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                    Wawancara biasanya berlangsung santai namun mendalam, dilakukan bersama principal (kepala sekolah ekspatriat) sepenuhnya dalam bahasa Inggris, membahas cara menangani murid dari latar belakang budaya berbeda.
+                </p>
+                
+                <!-- Poin-poin Format Ujian (Icon List) -->
+                <ul class="space-y-3 mb-5">
+                    <li class="flex items-start gap-3">
+                        <div class="mt-0.5 w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-500">
+                            <i class="fa-solid fa-shield-heart text-[10px]"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                            <strong class="text-slate-800">Safeguarding & Child Protection:</strong> Syarat mutlak! Menguji batasan profesional guru-murid serta tindakan konkret Anda saat menghadapi indikasi perundungan (<em>bullying</em>) atau pelecehan anak.
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-0.5 w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-500">
+                            <i class="fa-solid fa-users-rays text-[10px]"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                            <strong class="text-slate-800">Differentiated Learning:</strong> Strategi spesifik Anda dalam memfasilitasi murid yang beragam budaya, beda kelancaran bahasa Inggris ESL (English as a Second Language) EAL (English as an Additional Language), hingga anak berkebutuhan khusus SEN (Special Education Needs).
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Kotak Sorotan Khusus (Disiplin Restoratif) -->
+            <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 rounded-2xl border border-indigo-200 shadow-sm relative overflow-hidden mt-auto">
+                <i class="fa-solid fa-hands-holding-child absolute -right-2 -bottom-2 text-6xl text-indigo-500/10"></i>
+                <div class="relative z-10 flex items-start gap-3">
+                    <i class="fa-solid fa-comments text-indigo-500 text-base mt-0.5 animate-pulse"></i>
+                    <div>
+                        <strong class="text-xs md:text-sm text-indigo-900 block mb-1">Pendekatan Disiplin Restoratif</strong>
+                        <p class="text-[11px] md:text-xs text-indigo-800 font-medium leading-relaxed">
+                            SPK menghindari hukuman fisik/otoriter. Format <em>Behavioral Event Interview</em> (sepenuhnya bahasa Inggris) akan digunakan untuk membuktikan cara Anda mengedepankan empati dan resolusi konflik yang positif.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kartu 2: Detail Microteaching SPK -->
+        <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 p-5 group hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+                <!-- Animasi Visual Microteaching -->
+                <div class="w-full h-40 rounded-2xl bg-gradient-to-br from-slate-100 to-indigo-50 flex items-center justify-center border border-slate-200/50 group-hover:scale-[1.02] transition-transform duration-300 mb-5">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100">
+                        <i class="fa-solid fa-chalkboard-user text-3xl text-indigo-500"></i>
+                    </div>
+                </div>
+
+                <!-- Header Detail -->
+                <div class="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
+                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
+                        <i class="fa-solid fa-chalkboard-user text-xl text-indigo-500"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-indigo-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wide">Praktik Lapangan</span>
+                        <h5 class="font-bold text-slate-800 text-sm mt-1">Demo Mengajar (Microteaching)</h5>
+                    </div>
+                </div>
+
+                <!-- Deskripsi Utama -->
+                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                    Tahap yang paling menentukan. Kamu perlu menunjukkan cara mengajar yang interaktif menggunakan metode IB atau Cambridge, bukan sekadar menulis di papan tulis.
+                </p>
+                
+                <!-- Poin-poin Format Ujian (Icon List) -->
+                <ul class="space-y-3 mb-5">
+                    <li class="flex items-start gap-3">
+                        <div class="mt-0.5 w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-500">
+                            <i class="fa-solid fa-shapes text-[10px]"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                            <strong class="text-slate-800">Kurikulum Global:</strong> Wajib menguasai penerapan kurikulum internasional seperti <strong>IB (International Baccalaureate)</strong> atau kerangka <strong>Cambridge Assessment International Education</strong>.
+                        </p>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-0.5 w-6 h-6 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-500">
+                            <i class="fa-solid fa-people-arrows text-[10px]"></i>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
+                            <strong class="text-slate-800">Pembelajaran Interaktif:</strong> Bukan sekadar metode ceramah atau menulis di papan tulis. Anda harus mendemonstrasikan metode inkuiri di mana murid didorong untuk berpikir kritis dan berperan aktif.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Kotak Sorotan Khusus (Tahap Penentu) -->
+            <div class="bg-gradient-to-br from-fuchsia-50 to-pink-50 p-4 rounded-2xl border border-fuchsia-200 shadow-sm relative overflow-hidden mt-auto">
+                <i class="fa-solid fa-award absolute -right-2 -bottom-2 text-6xl text-fuchsia-500/10"></i>
+                <div class="relative z-10 flex items-start gap-3">
+                    <i class="fa-solid fa-medal text-fuchsia-500 text-base mt-0.5 animate-pulse"></i>
+                    <div>
+                        <strong class="text-xs md:text-sm text-fuchsia-900 block mb-1">Tahap Paling Menentukan</strong>
+                        <p class="text-[11px] md:text-xs text-fuchsia-800 font-medium leading-relaxed">
+                            Ini adalah momen pembuktian sesungguhnya! Penilai ingin melihat langsung energi, penguasaan manajemen kelas, serta kelancaran komunikasi Anda (dalam bahasa Inggris penuh) saat berhadapan dengan simulasi situasi kelas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                        <!-- Map Horizontal -->
+                        <div class="mb-10 bg-slate-50 rounded-3xl p-6 border border-slate-100 shadow-sm">
+                            <h4 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 font-display"><i class="fa-solid fa-route text-blue-800"></i> Alur Rekrutmen Internasional</h4>
+                            <div class="relative w-full overflow-x-auto pb-6 custom-scrollbar">
+                                <div class="min-w-[800px] flex justify-between relative px-4">
+                                    <div class="absolute top-6 left-12 right-12 h-1.5 bg-slate-200 rounded-full z-0"></div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">1</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Kirim CV</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">CV ATS (English)</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">2</div>
+                                        <h5 class="font-bold text-sm text-slate-800">HR Screen</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Cek Background & TOEFL</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">3</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Interview</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Sesi bareng Principal</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-white text-blue-800 flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-100 font-display">4</div>
+                                        <h5 class="font-bold text-sm text-slate-800">Demo Ajar</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Microteaching Live</p>
+                                    </div>
+                                    <div class="relative z-10 flex flex-col items-center text-center w-32">
+                                        <div class="w-12 h-12 rounded-full bg-blue-800 text-white flex items-center justify-center text-xl font-bold shadow-sm mb-3 border-4 border-slate-200"><i class="fa-solid fa-file-contract"></i></div>
+                                        <h5 class="font-bold text-sm text-slate-800">Kontrak</h5>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">Negosiasi Gaji (Offering)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 font-display"><i class="fa-solid fa-lightbulb text-blue-800"></i> Tips Sekolah Internasional</h4>
+                            <div class="flex flex-col gap-3">
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('swasta-acc-1')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">1. Wajib Punya Sertifikat TOEFL/IELTS</span>
+                                        <i id="icon-swasta-acc-1" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="swasta-acc-1" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>Gunakan sertifikat TOEFL/IELTS resmi, bukan tes tidak resmi. Sekolah internasional biasanya meminta hasil tes resmi (ETS TOEFL iBT minimal skor 80 atau IDP IELTS minimal Band 6.5) sebagai bukti kesiapan mengajar sepenuhnya dalam bahasa Inggris.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                                    <button onclick="toggleAccordion('swasta-acc-2')" class="w-full flex justify-between items-center px-6 py-4 text-left hover:bg-slate-50 transition-colors focus:outline-none group">
+                                        <span class="font-bold text-slate-700 group-hover:text-sky-500 transition-colors">2. Bikin CV ATS Friendly Berbahasa Inggris</span>
+                                        <i id="icon-swasta-acc-2" class="fa-solid fa-chevron-down text-blue-800 transition-transform duration-300"></i>
+                                    </button>
+                                    <div id="swasta-acc-2" class="accordion-content px-6 bg-slate-50">
+                                        <div class="py-4 border-t border-slate-200 text-sm text-slate-600 font-medium leading-relaxed">
+                                            <p>HRD sekolah swasta umumnya menggunakan software ATS. Gunakan layout CV yang minimalis (ATS friendly), sepenuhnya dalam bahasa Inggris, dan sertakan tautan portofolio digital atau video mengajar.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Karier Section -->
+    <section id="peta-tahapan" class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+                <span class="px-5 py-2 rounded-full bg-slate-100 border border-slate-200 text-blue-800 font-bold text-xs uppercase tracking-widest mb-4 inline-block font-display">Roadmap Karier</span>
+                <h3 class="text-3xl md:text-5xl font-extrabold text-slate-800 mb-4 font-display">Peta Tahapan Menjadi Guru Profesional</h3>
+                <p class="text-slate-600 text-lg font-medium">Peta karier profesional seorang guru dirancang melalui empat tahap utama: dimulai dari membangun fondasi akademik dan keterampilan dasar di bangku kuliah, mengumpulkan pengalaman nyata lewat program lapangan serta portofolio digital, melanjutkan ke fase legalitas melalui sertifikasi pendidik (PPG) untuk memilih jalur pengabdian, hingga mencapai puncak kepemimpinan dan spesialisasi keahlian setelah aktif mengajar.</p>
+            </div>
+
+            <div class="timeline-container max-w-5xl mx-auto py-8">
+                <!-- Step 1 -->
+                <div class="timeline-item left md:pr-12 md:text-right mb-12 fade-in">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-slate-200 relative z-10 timeline-content group">
+                        <span class="text-blue-800 font-bold text-xs bg-slate-100 px-3 py-1.5 rounded-full mb-4 inline-block uppercase tracking-wider font-display border border-slate-200 group-hover:bg-slate-200 transition-colors">Semester 5-8 Kuliah</span>
+                        <h4 class="text-2xl font-bold text-slate-800 mb-3 font-display">Kembangkan Portofolio & Kemampuan Mengajar</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 font-medium">
+                            Lulus dengan nilai memuaskan memang penting, tapi pengalaman nyata menghadapi dinamika kelas jauh lebih berharga. Jangan biarkan ilmumu hanya mengendap di bangku kuliah. Ambil inisiatif lewat Praktik Mengajar Langsung atau relawan pendidikan sedini mungkin, dan buktikan betapa menyenangkannya melihat anak-anak paham apa yang kamu ajarkan. Jangan lupa, abadikan proses belajarmu! Rangkum video microteaching terbaikmu, bahan ajar yang fun, dan presentasi kreasimu ke dalam satu tautan rapi di Google Sites. Percayalah, rekam jejak digital yang menunjukkan antusiasme dan senyummu saat mengajar akan jauh lebih meyakinkan pewawancara dibandingkan selembar CV biasa.                        </p>
+                        <div class="text-xs bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-600 inline-block text-left">
+                            <strong>Langkah Aksi:</strong> Buat situs portofolio gratis menggunakan Canva atau Notion.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="timeline-item right md:pl-12 mb-12 fade-in">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-slate-200 relative z-10 timeline-content group">
+                        <span class="text-blue-800 font-bold text-xs bg-slate-100 px-3 py-1.5 rounded-full mb-4 inline-block uppercase tracking-wider font-display border border-slate-200 group-hover:bg-slate-200 transition-colors">Setelah Lulus (Opsional tapi Sangat Disarankan)</span>
+                        <h4 class="text-2xl font-bold text-slate-800 mb-3 font-display">Mengejar Sertifikat Pendidik (PPG)</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 font-medium">
+                            Mendapatkan ijazah S.Pd baru permulaan. Daftarlah <strong>PPG Prajabatan</strong> (Pendidikan Profesi Guru) yang disubsidi pemerintah selama satu tahun. Lulusan PPG akan mendapatkan Serdik (Sertifikat Pendidik), yang memberikan nilai SKB maksimal (100) saat mendaftar CASN sekaligus menjadi syarat pencairan Tunjangan Profesi Guru (TPG) bulanan.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="timeline-item left md:pr-12 md:text-right mb-12 fade-in">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-slate-200 relative z-10 timeline-content group">
+                        <span class="text-blue-800 font-bold text-xs bg-slate-100 px-3 py-1.5 rounded-full mb-4 inline-block uppercase tracking-wider font-display border border-slate-200 group-hover:bg-slate-200 transition-colors">Fase Menunggu Bukaan</span>
+                        <h4 class="text-2xl font-bold text-slate-800 mb-3 font-display">Persiapan Berkas & Tryout</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 font-medium">
+                            Manfaatkan waktu ini sebaik mungkin. Urus KTP, legalisir SKCK, dan pastikan NIK sinkron dengan ijazah. Jika menargetkan CASN, mulai ikuti <strong>tryout SKD online</strong> secara rutin (fokus pada TIU dan TKP). Jika menargetkan sekolah swasta internasional, ambil tes resmi <strong>TOEFL iBT/IELTS</strong> selagi kemampuan bahasa Inggrismu masih terlatih.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="timeline-item right md:pl-12 mb-12 fade-in">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-slate-200 relative z-10 timeline-content group">
+                        <span class="text-blue-800 font-bold text-xs bg-slate-100 px-3 py-1.5 rounded-full mb-4 inline-block uppercase tracking-wider font-display border border-slate-200 group-hover:bg-slate-200 transition-colors">Fase Eksekusi</span>
+                        <h4 class="text-2xl font-bold text-slate-800 mb-3 font-display">Pendaftaran & Masa Tes</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 font-medium">
+                            Pantau informasi resmi di media sosial BKN/Kemdikbud (untuk CASN) atau situs karier sekolah pilihanmu. Buat akun SSCASN dengan teliti. Saat tes SKD/wawancara, jaga kesehatan dan atur manajemen waktu dengan baik, serta jawab soal dengan sudut pandang sebagai abdi negara atau pendidik modern.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="timeline-item left md:pr-12 md:text-right fade-in">
+                    <div class="bg-blue-800 p-8 rounded-[2rem] shadow-xl border border-white/20 relative z-10 timeline-content text-white">
+                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl mb-4 md:ml-auto border border-white/30">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-3 font-display">Pengabdian & Realitas Karier</h4>
+                        <p class="text-white/90 text-sm leading-relaxed mb-4 font-medium">
+                            Setelah dinyatakan lolos seleksi, tugas sesungguhnya baru dimulai. Kamu akan menghadapi kurikulum yang terus berkembang, karakter siswa yang beragam, hingga komunikasi dengan wali murid. Tetaplah rendah hati, terbuka untuk belajar hal baru, dan jadilah guru SD yang berdampak positif bagi anak-anak bangsa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Persiapan/Tips Section -->
+    <section id="persiapan" class="py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+                <span class="px-5 py-2 rounded-full bg-slate-100 border border-slate-200 text-blue-800 font-bold text-xs uppercase tracking-widest mb-4 inline-block font-display">Tips Persiapan</span>
+                <h3 class="text-3xl md:text-5xl font-extrabold text-slate-800 mb-4 font-display">Bekal Persiapan & Referensi Resmi</h3>
+                <p class="text-slate-600 text-lg font-medium">Siapkan dokumen penting dari jauh hari dan cek sumber belajar resmi yang kredibel. Klik tombol "Detail" untuk melihat panduan lengkapnya.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mb-16">
+                <!-- Kolom Dokumen Umum -->
+                <div class="glass-panel p-8 bg-white rounded-[2rem] shadow-sm border border-slate-200 fade-in relative overflow-hidden">
+                    <h4 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3 font-display relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 text-blue-800 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-folder-open"></i></div>
+                        <span>Dokumen Umum Pendaftaran</span>
+                    </h4>
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed font-medium relative z-10">
+                        Jangan menunggu portal pendaftaran dibuka baru mencari dokumen. Siapkan hasil pindai (scan) aslinya mulai sekarang:
+                    </p>
+                    <div class="space-y-4 relative z-10">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-800"></i> KTP Asli / Keterangan Dukcapil</span>
+                                <button onclick="openResourceModal('ktp')" aria-label="Lihat detail KTP" class="text-xs text-blue-800 hover:bg-slate-100 px-3 py-1 rounded-full font-bold transition-colors">Detail <i class="fa-solid fa-arrow-right"></i></button>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">Untuk verifikasi NIK dan data kependudukan secara nasional.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-blue-800"></i> Ijazah & Transkrip S1 PGSD Asli</span>
+                                <button onclick="openResourceModal('ijazah')" aria-label="Lihat detail Ijazah" class="text-xs text-blue-800 hover:bg-slate-100 px-3 py-1 rounded-full font-bold transition-colors">Detail <i class="fa-solid fa-arrow-right"></i></button>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">Syarat mutlak cek linieritas jurusan dengan formasi yang dilamar.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-file-contract text-blue-800"></i> Pasfoto & Surat Ber-meterai</span>
+                                <button onclick="openResourceModal('surat')" aria-label="Lihat detail Pasfoto" class="text-xs text-blue-800 hover:bg-slate-100 px-3 py-1 rounded-full font-bold transition-colors">Detail <i class="fa-solid fa-arrow-right"></i></button>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">Pasfoto background merah dan surat pernyataan resmi (pakai e-meterai).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Sumber Belajar Resmi -->
+                <div class="glass-panel p-8 bg-white rounded-[2rem] shadow-sm border border-slate-200 fade-in relative overflow-hidden">
+                    <h4 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3 font-display relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 text-blue-800 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-book-bookmark"></i></div>
+                        <span>Rekomendasi Sumber Belajar</span>
+                    </h4>
+                    <p class="text-sm text-slate-600 mb-6 leading-relaxed font-medium relative z-10">
+                        Banyak pihak menjual buku atau kursus berbayar, padahal kamu bisa berlatih secara kredibel melalui sumber-sumber berikut:
+                    </p>
+                    <div class="space-y-4 relative z-10">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-desktop text-blue-800"></i> Simulasi CAT BKN Resmi</span>
+                                <a href="https://cat.bkn.go.id" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-800 hover:bg-slate-100 px-3 py-1 rounded-full font-bold transition-colors">Kunjungi <i class="fa-solid fa-external-link-alt"></i></a>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">BKN menyediakan portal simulasi CAT gratis agar kamu terbiasa dengan format tes berbasis komputer sebelum ujian sesungguhnya.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-brands fa-youtube text-blue-800"></i> Tryout & Pembahasan SKD</span>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">Banyak kanal edukasi gratis membahas tuntas soal-soal TWK/TIU. Bimbingan belajar berbayar tidak wajib jika kamu disiplin belajar mandiri.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:border-slate-300 transition-colors">
+                            <h5 class="font-bold text-slate-800 text-sm flex items-center justify-between font-display tracking-wide">
+                                <span class="flex items-center gap-2"><i class="fa-solid fa-language text-blue-800"></i> Lembaga Resmi TOEFL / IELTS</span>
+                                <button onclick="openResourceModal('toefl')" aria-label="Lihat panduan TOEFL" class="text-xs text-blue-800 hover:bg-slate-100 px-3 py-1 rounded-full font-bold transition-colors">Panduan <i class="fa-solid fa-arrow-right"></i></button>
+                            </h5>
+                            <p class="text-xs text-slate-500 mt-2 font-medium">Buat incer sekolah internasional, ambil tes <strong>Academic</strong> dari ETS (TOEFL iBT) atau IDP/British Council (IELTS).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Tips Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Tip 1 -->
+                <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow group cursor-pointer" onclick="openModal('tip1')">
+                    <div class="h-32 bg-gradient-to-br from-blue-50 to-white flex items-center justify-center border-b border-slate-100">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-blue-200 group-hover:scale-110 transition-transform duration-500">
+                            <i class="fa-solid fa-clock text-2xl text-blue-800"></i>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wider">CASN</span>
+                        <h4 class="font-bold text-slate-800 mt-3 mb-2 leading-tight font-display text-lg">Strategi Lolos SKD CPNS</h4>
+                        <p class="text-slate-500 text-sm line-clamp-2 font-medium">Cara membagi waktu saat mengerjakan soal TWK, TIU, dan TKP agar tidak kehabisan waktu.</p>
+                    </div>
+                </div>
+                
+                <!-- Tip 2 -->
+                <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow group cursor-pointer" onclick="openModal('tip2')">
+                    <div class="h-32 bg-gradient-to-br from-sky-50 to-white flex items-center justify-center border-b border-slate-100">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-sky-200 group-hover:scale-110 transition-transform duration-500">
+                            <i class="fa-solid fa-chalkboard-user text-2xl text-sky-500"></i>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wider">Swasta</span>
+                        <h4 class="font-bold text-slate-800 mt-3 mb-2 leading-tight font-display text-lg">Microteaching dalam Bahasa Inggris</h4>
+                        <p class="text-slate-500 text-sm line-clamp-2 font-medium">Cara membuat kepala sekolah internasional terkesan saat demo mengajar, bukan sekadar berceramah.</p>
+                    </div>
+                </div>
+
+                <!-- Tip 3 -->
+                <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow group cursor-pointer" onclick="openModal('tip3')">
+                    <div class="h-32 bg-gradient-to-br from-indigo-50 to-white flex items-center justify-center border-b border-slate-100">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-200 group-hover:scale-110 transition-transform duration-500">
+                            <i class="fa-solid fa-laptop-code text-2xl text-indigo-500"></i>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wider">Skill</span>
+                        <h4 class="font-bold text-slate-800 mt-3 mb-2 leading-tight font-display text-lg">Membuat Portofolio yang Menarik</h4>
+                        <p class="text-slate-500 text-sm line-clamp-2 font-medium">Buat HRD tertarik hanya dengan tautan Google Sites berisi video mengajar dan karya RPM.</p>
+                    </div>
+                </div>
+
+                <!-- Tip 4 -->
+                <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow group cursor-pointer" onclick="openModal('tip4')">
+                    <div class="h-32 bg-gradient-to-br from-emerald-50 to-white flex items-center justify-center border-b border-slate-100">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm border border-emerald-200 group-hover:scale-110 transition-transform duration-500">
+                            <i class="fa-solid fa-award text-2xl text-emerald-500"></i>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[10px] font-bold text-blue-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full uppercase tracking-wider">Wajib Tahu</span>
+                        <h4 class="font-bold text-slate-800 mt-3 mb-2 leading-tight font-display text-lg">Manfaat Sertifikat Pendidik</h4>
+                        <p class="text-slate-500 text-sm line-clamp-2 font-medium">Alasan mengapa lulusan baru sebaiknya segera mengejar PPG Prajabatan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Asisten AI Section -->
+    <section id="tanya-ai" class="py-24 bg-white border-t border-slate-200 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10 fade-in">
+                <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-sm mb-4 shadow-sm font-display">
+                    <i class="fa-solid fa-wand-magic-sparkles text-blue-800"></i> Asisten AI Tersedia
+                </div>
+                <h3 class="text-3xl md:text-5xl font-extrabold text-slate-800 mb-4 font-display">Tanya Asisten AI PathTeacher</h3>
+                <p class="text-slate-600 text-lg font-medium">Ajukan pertanyaan seputar jadwal, syarat dokumen, Info GTK, atau tips seleksi PPPK/CPNS kepada asisten AI kami.</p>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="glass-panel bg-white/60 rounded-[2.5rem] shadow-[0_20px_50px_rgba(30,64,175,0.05)] border border-slate-200 overflow-hidden fade-in flex flex-col" style="height: 550px;">
+                <!-- Header Chat -->
+                <div class="bg-white/80 border-b border-slate-200 p-5 flex items-center gap-4 text-slate-800 relative z-10">
+                    <div class="w-12 h-12 bg-blue-800 rounded-[1rem] flex items-center justify-center text-white text-xl shadow-md border border-white">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg leading-tight font-display">Asisten PathTeacher</h4>
+                        <p class="text-xs text-slate-500 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span> Siap Membantu</p>
+                    </div>
+                </div>
+
+                <!-- Chat History -->
+                <div id="ai-chat-history" class="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50 custom-scrollbar scroll-smooth">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center flex-shrink-0 text-white shadow-sm mt-1 border border-white">
+                            <i class="fa-solid fa-robot text-sm"></i>
+                        </div>
+                        <div class="bg-white p-5 rounded-3xl rounded-tl-none border border-slate-200 shadow-sm text-slate-700 text-sm md:text-base max-w-[85%] font-medium leading-relaxed">
+                            Halo, calon pendidik!<br><br>
+                            Saya siap membantu menjawab pertanyaan kamu seputar:
+                            <ul class="list-disc ml-5 mt-2 space-y-1 text-slate-600">
+                                <li>Jadwal dan tips persiapan CPNS/PPPK</li>
+                                <li>Verifikasi Info GTK</li>
+                                <li>Persiapan seleksi Sekolah Internasional</li>
+                            </ul>
+                            <br>
+                            <em>Silakan ketik pertanyaanmu di bawah ini.</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Chat -->
+                <div class="p-5 bg-white border-t border-slate-200 relative z-10">
+                    <div class="relative flex items-end gap-3">
+                        <textarea id="ai-user-input" rows="1" aria-label="Input Chatbot AI" class="w-full bg-slate-100/80 border border-slate-200 rounded-[1.5rem] pl-5 pr-14 py-4 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-sky-300 resize-none max-h-32 transition-all custom-scrollbar font-medium" placeholder="Ketik pertanyaan kamu di sini..." oninput="this.style.height = '';this.style.height = Math.min(this.scrollHeight, 128) + 'px'"></textarea>
+                        
+                        <button id="ai-send-btn" onclick="sendToGemini()" aria-label="Kirim Pesan" class="absolute right-3 bottom-2.5 bg-sky-500 hover:bg-sky-600 text-white w-11 h-11 rounded-[1.2rem] flex items-center justify-center transition-all shadow-md transform hover:scale-105 active:scale-95 disabled:opacity-50">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Layout untuk Tips & Artikel -->
+    <div id="article-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center px-4 sm:px-6">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop" onclick="closeModal()"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col transform scale-95 opacity-0 transition-all duration-300 z-10 border border-slate-200" id="modal-panel">
+            
+            <div class="flex items-center justify-between p-6 border-b border-slate-200">
+                <div class="flex items-center gap-3">
+                    <span id="modal-tag" class="text-xs font-bold px-4 py-1.5 rounded-full font-display uppercase tracking-wider">Tag</span>
+                </div>
+                <button onclick="closeModal()" aria-label="Tutup Modal" class="text-slate-400 hover:text-sky-500 focus:outline-none bg-slate-50 hover:bg-slate-100 rounded-full w-10 h-10 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 overflow-y-auto custom-scrollbar" id="modal-content">
+                <h3 id="modal-title" class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-6 leading-tight font-display">Judul Artikel</h3>
+                <div id="modal-body" class="text-slate-600 space-y-4 text-base leading-relaxed font-medium"></div>
+            </div>
+            
+            <div class="p-6 border-t border-slate-200 bg-slate-50 rounded-b-[2rem] flex justify-end">
+                <button onclick="closeModal()" class="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full font-bold transition-transform transform hover:scale-105 font-display tracking-wide shadow-md">Tutup Artikel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Detail Dokumen & Sumber Belajar -->
+    <div id="resource-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center px-4 sm:px-6">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="resource-backdrop" onclick="closeResourceModal()"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col transform scale-95 opacity-0 transition-all duration-300 z-10 border border-slate-200" id="resource-panel">
+            
+            <div class="flex items-center justify-between p-6 border-b border-slate-200">
+                <h3 id="resource-modal-title" class="text-xl font-extrabold text-slate-800 font-display">Judul Detail</h3>
+                <button onclick="closeResourceModal()" aria-label="Tutup Detail" class="text-slate-400 hover:text-sky-500 focus:outline-none bg-slate-50 hover:bg-slate-100 rounded-full w-10 h-10 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 overflow-y-auto custom-scrollbar text-slate-600 text-sm md:text-base leading-relaxed space-y-4 font-medium" id="resource-modal-body">
+                <!-- Konten dinamis dari JS -->
+            </div>
+            
+            <div class="p-6 border-t border-slate-200 bg-slate-50 rounded-b-[2rem] flex justify-end">
+                <button onclick="closeResourceModal()" class="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full font-bold transition-transform transform hover:scale-105 font-display tracking-wide shadow-md">Paham!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white pt-16 pb-8 border-t-4 border-blue-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-10 h-10 bg-blue-800 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="y2k-cyber-text-sm text-2xl">PathTeacher</span>
+                    </div>
+                    <p class="text-slate-400 mb-6 max-w-sm font-medium leading-relaxed">
+                        Portal panduan karier untuk mahasiswa dan alumni PGSD Indonesia — informasi lengkap seputar CPNS, PPPK, dan sekolah internasional.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-display text-white">Menu Utama</h4>
+                    <ul class="space-y-3 text-slate-400 font-medium">
+                        <li><a href="#beranda" class="hover:text-sky-400 transition-colors">Beranda</a></li>
+                        <li><a href="#jalur-karier" class="hover:text-sky-400 transition-colors">Jalur CPNS & PPPK</a></li>
+                        <li><a href="#peta-tahapan" class="hover:text-sky-400 transition-colors">Roadmap Karier</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-display text-white">Dukungan</h4>
+                    <ul class="space-y-3 text-slate-400 font-medium">
+                        <li><a href="#tanya-ai" class="hover:text-sky-400 transition-colors">Tanya AI PathTeacher</a></li>
+                        <li><a href="#" class="hover:text-sky-400 transition-colors">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-slate-500 text-sm font-bold font-display tracking-wide">
+                <p>&copy; 2026 PathTeacher PGSD. Dibuat untuk mendukung persiapan karier Guru SD masa depan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Observer Animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('appear');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach((element) => observer.observe(element));
+
+        // Tab Navigation
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('content-' + tabId).classList.add('active');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            
+            // Adjusting Active Tab Colors (Blue Palette)
+            activeBtn.style.color = '#1e40af'; 
+            activeBtn.style.borderColor = '#0ea5e9'; 
+        }
+
+        // Accordions
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (!content.classList.contains('open')) {
+                const parentTab = content.closest('.tab-content');
+                parentTab.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
+                parentTab.querySelectorAll('.fa-chevron-down').forEach(el => el.style.transform = 'rotate(0deg)');
+
+                content.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.remove('open');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+       // --- DIREVISI: Database 8 Unsur Kriteria Motivasi A.M. Sardiman (Total 24 Kartu) ---
+        const tarotMotivations = [
+            // 1. KETEKUNAN
+            { 
+                kriteria: "Ketekunan", 
+                quote: "Menjadi guru hebat bukan soal kecepatan, tapi soal langkah kecil yang tidak pernah berhenti.", 
+                pesan: "Persiapan karier CPNS atau PPG butuh waktu. Tetaplah belajar secara konsisten setiap hari meskipun perlahan. Ketekunanmu hari ini adalah kunci kelas pertamamu nanti." 
+            },
+            { 
+                kriteria: "Ketekunan", 
+                quote: "Bukan kekuatan yang membawa kemenangan, melainkan ketekunan yang tak kenal lelah.", 
+                pesan: "Setiap halaman buku pedagogik yang kamu baca hari ini akan menjadi jembatan menuju mimpimu. Teruslah melangkah, sedikit demi sedikit." 
+            },
+            { 
+                kriteria: "Ketekunan", 
+                quote: "Air menetes melubangi batu bukan karena kerasnya, melainkan karena tetesannya yang terus-menerus.", 
+                pesan: "Jangan abaikan rutinitas belajarmu. Ketekunan dalam mengerjakan tryout SKD akan membuahkan hasil manis di hari ujian nanti." 
+            },
+
+            // 2. KEULETAN
+            { 
+                kriteria: "Keuletan", 
+                quote: "Batu karang tidak hancur oleh ombak pertama, ia terbentuk oleh hantaman ombak yang berkali-kali.", 
+                pesan: "Jika simulasi tes SKD/SKB masih di bawah passing grade, jangan menyerah. Kegagalan latihan adalah data untuk memperbaiki kelemahanmu, bukan tanda kamu tidak pantas." 
+            },
+            { 
+                kriteria: "Keuletan", 
+                quote: "Kegagalan hanyalah kesempatan untuk memulai lagi dengan lebih cerdas.", 
+                pesan: "Belum lolos seleksi berkas atau tes? Jatuh tujuh kali, bangkit delapan kali. Keuletanmu akan mengalahkan soal-soal tersulit di SKB nanti." 
+            },
+            { 
+                kriteria: "Keuletan", 
+                quote: "Kemenangan adalah milik mereka yang paling ulet dan tidak mudah patah semangat.", 
+                pesan: "Ujian menjadi guru memang menguras tenaga dan emosi. Jadikan rasa lelah sebagai cambuk untuk mencoba lebih keras lagi esok hari." 
+            },
+
+            // 3. MINAT EKSPLORASI
+            { 
+                kriteria: "Minat Eksplorasi", 
+                quote: "Guru yang berhenti belajar adalah guru yang berhenti mengajar.", 
+                pesan: "Buka pikiranmu untuk berbagai jalur karier. Jangan terpaku pada satu instansi. Pelajari dinamika kurikulum baru, teknologi pendidikan, atau peluang di sekolah swasta." 
+            },
+            { 
+                kriteria: "Minat Eksplorasi", 
+                quote: "Dunia pendidikan seluas cakrawala, jangan batasi dirimu hanya pada satu buku teks.", 
+                pesan: "Jelajahi metode mengajar terbaru, ikuti seminar, dan pelajari kurikulum internasional. Pikiran yang terbuka akan membawamu pada peluang tak terduga." 
+            },
+            { 
+                kriteria: "Minat Eksplorasi", 
+                quote: "Rasa ingin tahu adalah sumbu dari setiap penemuan dan pembelajaran yang bermakna.", 
+                pesan: "Jangan ragu untuk mencari tahu bagaimana sekolah SPK atau multikultural beroperasi. Eksplorasi akan memperkaya wawasanmu sebagai pendidik modern." 
+            },
+
+            // 4. KEMANDIRIAN
+            { 
+                kriteria: "Kemandirian", 
+                quote: "Masa depanmu tidak bergantung pada siapa yang membantumu, tapi pada apa yang kamu inisiasi hari ini.", 
+                pesan: "Jangan menunggu teman untuk mulai menyusun portofolio atau belajar. Ambil kendali atas persiapan kariermu sendiri. Proaktiflah mencari informasi dan peluang." 
+            },
+            { 
+                kriteria: "Kemandirian", 
+                quote: "Berdiri di atas kaki sendiri adalah langkah pertama menuju kebebasan berkarya.", 
+                pesan: "Cari tahu sendiri persyaratan CPNS atau PPPK tanpa harus selalu disuapi informasi. Kemandirian ini yang akan membuatmu tangguh saat sudah mengajar nanti." 
+            },
+            { 
+                kriteria: "Kemandirian", 
+                quote: "Kemampuan mengambil keputusan sendiri adalah ciri guru pemimpin.", 
+                pesan: "Percayalah pada pilihan kariermu. Kelola waktu belajarmu sendiri dengan disiplin tanpa perlu disuruh oleh dosen atau orang tua." 
+            },
+
+            // 5. INOVASI
+            { 
+                kriteria: "Inovasi", 
+                quote: "Jika kamu melakukan hal yang sama terus-menerus, jangan berharap hasil yang berbeda.", 
+                pesan: "Tinggalkan metode belajar yang usang. Temukan cara baru yang kreatif untuk mempersiapkan diri. Calon guru modern harus adaptif terhadap perubahan zaman." 
+            },
+            { 
+                kriteria: "Inovasi", 
+                quote: "Inovasi membedakan antara seorang pemimpin dan pengikut.", 
+                pesan: "Buatlah media pembelajaran yang interaktif dan portofolio digital yang unik. HRD sekolah internasional sangat mencari guru yang berani berinovasi." 
+            },
+            { 
+                kriteria: "Inovasi", 
+                quote: "Jangan takut mencoba hal baru; kelasmu menantikan sentuhan kreativitasmu.", 
+                pesan: "Saat wawancara atau microteaching, tunjukkan pendekatan mengajar yang unik. Jadilah pendidik yang memberikan solusi kreatif bagi kelas." 
+            },
+
+            // 6. KETEGUHAN PRINSIP
+            { 
+                kriteria: "Keteguhan Prinsip", 
+                quote: "Seorang pendidik harus memiliki akar yang kuat agar tidak tumbang oleh opini yang salah.", 
+                pesan: "Percayalah pada kapasitas dirimu dan hasil tes minat bakatmu. Jika kamu yakin dengan jalur karier pilihanmu, pertahankan argumen dan visimu dengan rasional." 
+            },
+            { 
+                kriteria: "Keteguhan Prinsip", 
+                quote: "Integritas adalah melakukan hal yang benar, bahkan ketika tidak ada yang melihat.", 
+                pesan: "Tetaplah jujur dalam setiap tahap seleksi dan persiapan. Keteguhan prinsipmu akan menjadikanmu teladan sejati bagi murid-muridmu kelak." 
+            },
+            { 
+                kriteria: "Keteguhan Prinsip", 
+                quote: "Prinsip yang kokoh adalah mercusuar di tengah badai keraguan.", 
+                pesan: "Mungkin banyak yang meragukan pilihanmu menjadi guru. Tetaplah teguh pada panggilan hatimu dan buktikan dengan dedikasi serta prestasi." 
+            },
+
+            // 7. KOMITMEN
+            { 
+                kriteria: "Komitmen", 
+                quote: "Panggilan jiwa sebagai pendidik adalah janji seumur hidup pada masa depan bangsa.", 
+                pesan: "Mengabdi menjadi guru mungkin penuh jalan terjal. Ingat kembali alasan utamamu memilih jurusan PGSD. Pegang teguh nilai pengabdian itu sebagai kompas kariermu." 
+            },
+            { 
+                kriteria: "Komitmen", 
+                quote: "Komitmen adalah apa yang mengubah janji menjadi kenyataan.", 
+                pesan: "Selesaikan apa yang sudah kamu mulai. Jika kamu sudah mendaftar PPG Prajabatan, jalani setiap prosesnya dengan dedikasi penuh hingga mendapat Serdik." 
+            },
+            { 
+                kriteria: "Komitmen", 
+                quote: "Cinta pada profesi terlihat dari seberapa jauh kamu rela berkorban untuknya.", 
+                pesan: "Tetaplah setia pada tujuanmu meski lelah menyita waktu liburmu. Komitmenmu hari ini akan diukir dalam keberhasilan siswa-siswamu nanti." 
+            },
+
+            // 8. PEMECAH MASALAH
+            { 
+                kriteria: "Pemecah Masalah", 
+                quote: "Setiap masalah di kelas atau dalam karier adalah ujian kepemimpinan yang menyamar.", 
+                pesan: "Biasakan dirimu dengan soal penalaran studi kasus. Jadilah calon guru yang berorientasi pada solusi, bukan yang sekadar mengeluhkan keadaan birokrasi." 
+            },
+            { 
+                kriteria: "Pemecah Masalah", 
+                quote: "Orang pesimis melihat kesulitan dalam setiap kesempatan; orang optimis melihat kesempatan dalam setiap kesulitan.", 
+                pesan: "Ada kendala administrasi di Info GTK? Jangan panik, cari akar masalahnya. Guru yang hebat selalu fokus pada jalan keluar, bukan meratapi masalahnya." 
+            },
+            { 
+                kriteria: "Pemecah Masalah", 
+                quote: "Kecerdasan sejati diukur dari kemampuan beradaptasi dan menyelesaikan tantangan.", 
+                pesan: "Saat ujian wawancara PPPK atau SJT, tunjukkan bahwa kamu mampu menghadapi konflik kelas dengan kepala dingin dan solusi yang mengutamakan siswa." 
+            }
+        ];
+        function flipSingleCard() {
+            const card = document.getElementById('single-tarot-card');
+            card.classList.toggle('flipped');
+        }
+
+        // --- DIREVISI: Fungsi Mengocok & Menampilkan 8 Kriteria ---
+        function shuffleSingleTarot() {
+            const card = document.getElementById('single-tarot-card');
+            const icon = document.getElementById('shuffle-icon');
+            
+            icon.classList.add('fa-spin');
+            card.classList.add('shuffling');
+
+            setTimeout(() => {
+                const randomCard = tarotMotivations[Math.floor(Math.random() * tarotMotivations.length)];
+                
+                document.getElementById('tarot-badge').innerText = randomCard.kriteria;
+                document.getElementById('tarot-word').innerText = '"' + randomCard.quote + '"';
+                document.getElementById('tarot-desc').innerText = randomCard.pesan;
+
+                card.classList.remove('flipped');
+                card.classList.remove('shuffling');
+                icon.classList.remove('fa-spin');
+
+                setTimeout(() => {
+                    card.classList.add('flipped');
+                }, 200);
+            }, 600);
+        }
+        // -------------------------------------------------------------
+
+        const quizData = [
+            {
+                question: "1. Lingkungan kerja seperti apa yang paling kamu inginkan?",
+                options: [
+                    { text: "Aman dan stabil, dengan jaminan hari tua sampai pensiun (PNS).", type: "cpns" },
+                    { text: "Bisa segera mengabdi, penghasilan setara PNS, dengan sistem kontrak yang fleksibel.", type: "pppk" },
+                    { text: "Dinamis, fasilitas lengkap, dan penghasilan tinggi.", type: "swasta" }
+                ]
+            },
+            {
+                question: "2. Bagaimana tingkat kepercayaan dirimu berbicara Bahasa Inggris di depan umum?",
+                options: [
+                    { text: "Lebih nyaman menggunakan Bahasa Indonesia sepenuhnya.", type: "cpns" },
+                    { text: "Cukup baik untuk percakapan dasar sehari-hari.", type: "pppk" },
+                    { text: "Lancar — siap mengajar sepenuhnya dalam Bahasa Inggris setiap hari.", type: "swasta" }
+                ]
+            },
+            {
+                question: "3. Menurutmu, ujian seleksi kerja yang ideal itu seperti apa?",
+                options: [
+                    { text: "Ujian tertulis berbasis komputer (CAT) yang menguji logika dan wawasan kebangsaan.", type: "cpns" },
+                    { text: "Ujian studi kasus tentang cara mengajar dan menyelesaikan masalah di kelas.", type: "pppk" },
+                    { text: "Praktik mengajar langsung (microteaching) di hadapan kepala sekolah.", type: "swasta" }
+                ]
+            },
+            {
+                question: "4. Kurikulum apa yang paling ingin kamu pelajari dan ajarkan?",
+                options: [
+                    { text: "Kurikulum Nasional/Merdeka yang diterapkan di sekolah negeri pada umumnya.", type: "cpns" },
+                    { text: "Kurikulum Merdeka dengan penyesuaian kebutuhan sekolah daerah.", type: "pppk" },
+                    { text: "Kurikulum internasional seperti Cambridge Primary atau IB (International Baccalaureate).", type: "swasta" }
+                ]
+            },
+            {
+                question: "5. Bagaimana pendapatmu tentang birokrasi dan seragam dinas (seperti Khaki/Batik Korpri)?",
+                options: [
+                    { text: "Bangga — memang menjadi cita-cita sejak kecil untuk mengenakan seragam itu.", type: "cpns" },
+                    { text: "Biasa saja, yang penting mengajar secara resmi dengan SK dari pemerintah.", type: "pppk" },
+                    { text: "Kurang menyukai birokrasi yang kaku, lebih nyaman dengan gaya berpakaian yang lebih santai.", type: "swasta" }
+                ]
+            },
+            {
+                question: "6. Terkait target waktu, kapan kamu ingin mulai bekerja?",
+                options: [
+                    { text: "Bersedia menunggu pembukaan formasi setahun sekali demi status PNS seumur hidup.", type: "cpns" },
+                    { text: "Ingin segera diangkat, dengan peluang formasi yang lebih besar dan proses lebih cepat.", type: "pppk" },
+                    { text: "Fleksibel, mencari peluang sendiri melalui LinkedIn atau portal karier.", type: "swasta" }
+                ]
+            },
+            {
+                question: "7. Lingkungan murid seperti apa yang lebih siap kamu hadapi?",
+                options: [
+                    { text: "Murid di sekolah negeri pada umumnya, dari berbagai latar belakang ekonomi.", type: "cpns" },
+                    { text: "Siswa di sekolah daerah yang membutuhkan guru dengan jiwa pengabdian dan kesabaran tinggi.", type: "pppk" },
+                    { text: "Murid ekspatriat atau dari keluarga dengan latar belakang budaya yang beragam.", type: "swasta" }
+                ]
+            },
+            {
+                question: "8. Bagaimana pandanganmu tentang Sertifikat Pendidik (Serdik)?",
+                options: [
+                    { text: "Penting dimiliki karena memberi nilai maksimal saat mendaftar CASN.", type: "cpns" },
+                    { text: "Penting untuk pencairan TPG, namun keterterimaan di PPPK lebih diprioritaskan.", type: "pppk" },
+                    { text: "Penting, tetapi skor TOEFL iBT dan kemampuan berbicara lebih krusial.", type: "swasta" }
+                ]
+            },
+            {
+                question: "9. Apa modal utamamu untuk meyakinkan pewawancara?",
+                options: [
+                    { text: "Pemahaman ideologi Pancasila dan jiwa melayani negara.", type: "cpns" },
+                    { text: "Pengalaman lapangan menangani berbagai karakter anak, misalnya melalui Kampus Mengajar.", type: "pppk" },
+                    { text: "Portofolio digital yang rapi dan kemampuan beradaptasi dengan kurikulum internasional.", type: "swasta" }
+                ]
+            },
+            {
+                question: "10. Dalam 5 tahun ke depan, kamu membayangkan posisi kariermu berada di tahap apa?",
+                options: [
+                    { text: "Guru PNS golongan III yang sedang menempuh jenjang kepangkatan struktural.", type: "cpns" },
+                    { text: "Guru PPPK yang mapan dan dihormati masyarakat, menunggu perpanjangan kontrak.", type: "pppk" },
+                    { text: "Homeroom teacher atau mendapat kesempatan mengajar di luar negeri.", type: "swasta" }
+                ]
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScores = { cpns: 0, pppk: 0, swasta: 0 };
+
+        // Memuat progress dari Local Storage saat pertama kali dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedScores = localStorage.getItem('pathTeacherScores');
+            const savedIndex = localStorage.getItem('pathTeacherIndex');
+            
+            if (savedScores && savedIndex) {
+                quizScores = JSON.parse(savedScores);
+                currentQuizIndex = parseInt(savedIndex);
+
+                document.getElementById('btn-quiz-text').innerText = "Lanjutkan Kuis";
+                document.getElementById('btn-reset-saved').classList.remove('hidden');
+                document.getElementById('btn-reset-saved').classList.add('inline-flex');
+
+                if (currentQuizIndex >= quizData.length) {
+                    document.getElementById('quiz-intro').classList.add('hidden');
+                    showQuizResult();
+                }
+            }
+        });
+
+        function startQuiz(reset = false) {
+            document.getElementById('quiz-intro').classList.add('hidden');
+            document.getElementById('quiz-questions-screen').classList.remove('hidden');
+            
+            if (reset) {
+                currentQuizIndex = 0;
+                quizScores = { cpns: 0, pppk: 0, swasta: 0 };
+                localStorage.removeItem('pathTeacherScores');
+                localStorage.removeItem('pathTeacherIndex');
+            }
+            
+            const bgm = document.getElementById('quiz-bgm');
+            if(bgm) {
+                bgm.volume = 0.3; 
+                bgm.play().catch(e => console.log("Audio play error:", e));
+            }
+
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const q = quizData[currentQuizIndex];
+            const total = quizData.length;
+            const progress = ((currentQuizIndex + 1) / total) * 100;
+
+            document.getElementById('quiz-counter').innerText = `Pertanyaan ${currentQuizIndex + 1}/${total}`;
+            document.getElementById('quiz-progress-text').innerText = `${Math.round(progress)}%`;
+            document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+            document.getElementById('quiz-question-title').innerText = q.question;
+
+            const optionsList = document.getElementById('quiz-options-list');
+            optionsList.innerHTML = '';
+
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border border-slate-200 hover:border-sky-500 hover:bg-slate-100 transition-all font-medium text-slate-700 text-sm md:text-base flex items-center justify-between group shadow-sm bg-white";
+                btn.innerHTML = `
+                    <span>${opt.text}</span>
+                    <i class="fa-solid fa-check text-slate-200 group-hover:text-sky-500 transition-colors"></i>
+                `;
+                btn.onclick = () => selectQuizAnswer(opt.type);
+                optionsList.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(type) {
+            quizScores[type]++;
+            currentQuizIndex++;
+
+            // Simpan otomatis ke Local Storage browser
+            localStorage.setItem('pathTeacherScores', JSON.stringify(quizScores));
+            localStorage.setItem('pathTeacherIndex', currentQuizIndex);
+
+            if (currentQuizIndex < quizData.length) {
+                loadQuizQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-questions-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+
+            const bgm = document.getElementById('quiz-bgm');
+            if(bgm) {
+                bgm.pause();
+                bgm.currentTime = 0; 
+            }
+
+            let highestType = 'cpns';
+            if (quizScores.pppk > quizScores.cpns && quizScores.pppk >= quizScores.swasta) highestType = 'pppk';
+            else if (quizScores.swasta > quizScores.cpns && quizScores.swasta > quizScores.pppk) highestType = 'swasta';
+
+            const resultTitle = document.getElementById('result-title');
+            const resultDesc = document.getElementById('result-description');
+            const resultQuote = document.getElementById('result-quote');
+            const actionBtn = document.getElementById('result-action-btn');
+
+            if (highestType === 'cpns') {
+                resultTitle.innerText = "Jalur yang Sesuai: Guru CPNS (PNS)";
+                resultDesc.innerHTML = "Kamu cocok dengan jalur karier sebagai abdi negara — menyukai kepastian, jaminan hari tua, dan kebanggaan melayani negeri melalui sistem resmi. Mulai persiapkan materi TWK dan TIU dari sekarang.";
+                resultQuote.innerText = `"Stabilitas adalah hasil dari ketekunan belajar yang dimulai hari ini."`;
+                actionBtn.onclick = () => openTab('cpns');
+            } else if (highestType === 'pppk') {
+                resultTitle.innerText = "Jalur yang Sesuai: Guru PPPK";
+                resultDesc.innerHTML = "Kamu tipe yang gesit, solutif, dan siap bekerja. Jalur PPPK cocok untukmu yang ingin segera mendapatkan SK mengajar dengan penghasilan stabil — fokuslah mengasah kemampuan pedagogik di kelas.";
+                resultQuote.innerText = `"Bukan soal status, tapi seberapa cepat kamu berkontribusi mencerdaskan anak bangsa."`;
+                actionBtn.onclick = () => openTab('pppk');
+            } else {
+                resultTitle.innerText = "Jalur yang Sesuai: Sekolah Internasional";
+                resultDesc.innerHTML = "Kamu cocok di lingkungan multikultural dengan birokrasi minim dan penggunaan bahasa Inggris sehari-hari. Mulai kejar skor TOEFL/IELTS dan pelajari kurikulum internasional seperti IB.";
+                resultQuote.innerText = `"Bermimpilah besar, mengajarlah secara global — peluangmu tidak terbatas di dalam negeri."`;
+                actionBtn.onclick = () => openTab('swasta');
+            }
+        }
+
+        function cetakHasilKuis() {
+            window.print();
+        }
+
+        const tipsData = {
+            tip1: {
+                title: "Strategi Lolos Passing Grade SKD CPNS",
+                tag: "CASN",
+                tagColor: "bg-slate-100 text-blue-800 border border-slate-200",
+                content: `
+                    <p class="font-medium text-slate-800">SKD (Seleksi Kompetensi Dasar) sering membuat peserta kehabisan waktu. Berikut strategi pembagian waktunya:</p>
+                    <ul class="list-disc ml-5 space-y-2 mt-3 text-slate-600">
+                        <li><strong>TKP (Tes Karakteristik Pribadi) (± 35 menit):</strong> Kerjakan terlebih dahulu. Tidak ada nilai nol, sehingga pasti menyumbang poin. Jawaban idealnya adalah opsi yang paling profesional, inovatif, dan kolaboratif.</li>
+                        <li><strong>TIU (Tes Intelegensi Umum) (± 40 menit):</strong> Setelah TKP, lanjutkan ke bagian logika TIU. Kerjakan deret angka dan silogisme terlebih dahulu. Jika menemukan soal hitungan yang rumit, lewati dulu agar tidak menghabiskan waktu untuk satu soal.</li>
+                        <li><strong>TWK (Tes Wawasan Kebangsaan) (± 25 menit):</strong> Sejarah dan UUD. Bagian ini mengandalkan ingatan, jadi jawab dengan insting pertama karena berpikir terlalu lama justru bisa membingungkan.</li>
+                    </ul>
+                `
+            },
+            tip2: {
+                title: "Menguasai Microteaching Berbahasa Inggris",
+                tag: "Sekolah Swasta Internasional",
+                tagColor: "bg-slate-100 text-blue-800 border border-slate-200",
+                content: `
+                    <p class="font-medium text-slate-800">Sekolah SPK (Satuan Pendidikan Kerjasama) umumnya kurang menyukai metode mengajar yang hanya berupa ceramah.</p>
+                    <ul class="list-disc ml-5 space-y-2 mt-3 text-slate-600">
+                        <li><strong>Inquiry-Based:</strong> Jangan langsung memberi tahu jawabannya. Berikan murid petunjuk atau media pembelajaran (realia) agar mereka menemukan sendiri jawabannya.</li>
+                        <li><strong>Positive Reinforcement:</strong> Berikan pujian yang spesifik (misalnya: "I love how you solved that puzzle, Emma!") daripada sekadar mengatakan "Good job!".</li>
+                        <li><strong>Aksen bukan yang utama:</strong> Tidak perlu memaksakan aksen British/American jika tidak natural. Yang terpenting adalah pelafalan yang jelas dan tata bahasa yang benar.</li>
+                    </ul>
+                `
+            },
+            tip3: {
+                title: "Membuat Portofolio Guru yang Menarik",
+                tag: "Umum / Skill",
+                tagColor: "bg-slate-100 text-blue-800 border border-slate-200",
+                content: `
+                    <p class="font-medium text-slate-800">CV dalam bentuk PDF saja tidak cukup, kamu perlu memiliki portofolio digital.</p>
+                    <ul class="list-disc ml-5 space-y-2 mt-3 text-slate-600">
+                        <li>Buat menggunakan <strong>Google Sites</strong> atau <strong>Notion</strong> (gratis dan tampilannya modern).</li>
+                        <li>Isi dengan: rekaman 3-5 menit saat mengajar (microteaching), foto kegiatan melaksanakan program kerja lapangan, desain presentasi yang pernah dibuat, dan RPM dengan format yang rapi (bisa menggunakan Canva).</li>
+                        <li>Sertakan tautan portofolio (atau kode QR) tersebut di CV utama. Ini akan menarik perhatian HRD.</li>
+                    </ul>
+                `
+            },
+            tip4: {
+                title: "Manfaat Sertifikat Pendidik (Serdik)",
+                tag: "Sertifikasi",
+                tagColor: "bg-slate-100 text-blue-800 border border-slate-200",
+                content: `
+                    <p class="font-medium text-slate-800">Setelah lulus, segera daftar PPG Prajabatan alih-alih menunggu pembukaan CPNS.</p>
+                    <ul class="list-disc ml-5 space-y-2 mt-3 text-slate-600">
+                        <li><strong>Nilai Tambah Signifikan:</strong> Memiliki Serdik linier berarti kamu mendapat <strong>afirmasi poin 100 maksimal</strong> untuk tes SKB CASN — keunggulan besar dibanding peserta yang belum memilikinya.</li>
+                        <li><strong>Tunjangan Cair:</strong> Syarat utama untuk mendapatkan Tunjangan Profesi Guru dari negara adalah memiliki Serdik ini.</li>
+                        <li><strong>Subsidi Penuh:</strong> Program Prajabatan dari Kemdikbud umumnya disubsidi, sehingga kamu bisa menempuh pendidikan setahun tanpa biaya untuk masa depan yang lebih terjamin.</li>
+                    </ul>
+                `
+            }
+        };
+
+        const resourceDetails = {
+            ktp: {
+                title: "Panduan Dokumen: KTP & NIK",
+                content: `
+                    <p class="mb-3">KTP bukan sekadar kartu identitas — NIK di dalamnya menjadi kunci utama pendaftaran SSCASN kamu.</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li>Pastikan nama, tempat, dan tanggal lahir di KTP sama persis dengan yang tertera di <strong>Ijazah S1 PGSD</strong>.</li>
+                        <li>Jika terdapat perbedaan sekecil apa pun, segera urus surat perbaikan ke Dukcapil sebelum portal pendaftaran BKN dibuka.</li>
+                        <li>Siapkan hasil pindai KTP asli dalam format JPEG/JPG (ukuran maksimal biasanya 200-300kb). Hindari memindai hasil fotokopi KTP.</li>
+                    </ul>
+                `
+            },
+            ijazah: {
+                title: "Panduan Dokumen: Ijazah & Transkrip S1 PGSD",
+                content: `
+                    <p class="mb-3">Dokumen ini menentukan formasi mana yang bisa kamu lamar.</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li>Sistem BKN akan memeriksa apakah jurusan di ijazah kamu <strong>linier</strong> dengan formasi yang dipilih (misalnya, S1 PGSD wajib linier dengan formasi Guru Kelas Ahli Pertama).</li>
+                        <li>Periksa dari sekarang apakah nama dan data ijazah kamu sudah terdaftar dan aktif di <strong>PDDIKTI (pddikti.kemdikbud.go.id)</strong>. Jika belum, segera laporkan ke admin kampus.</li>
+                        <li>Gunakan hasil pindai ijazah dan transkrip asli berwarna, bukan hasil legalisir hitam putih (tergantung syarat instansi).</li>
+                    </ul>
+                `
+            },
+            surat: {
+                title: "Panduan Dokumen: Pasfoto & E-Meterai",
+                content: `
+                    <p class="mb-3">Dokumen teknis yang sering membuat peserta gagal di tahap administrasi.</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><strong>Pasfoto:</strong> Gunakan kemeja putih rapi dengan latar belakang merah terang (untuk CPNS/PPPK). Hindari penggunaan filter kecantikan berlebihan karena dapat menyulitkan proses pengenalan wajah (face recognition) saat hari ujian.</li>
+                        <li><strong>E-Meterai:</strong> Beli di agen resmi Peruri. Jangan menandatangani di atas barcode meterai elektronik — tempel meterai di sebelah kiri atau kanan tanda tangan.</li>
+                    </ul>
+                `
+            },
+            toefl: {
+                title: "Panduan Resmi Sertifikasi TOEFL & IELTS",
+                content: `
+                    <p class="mb-3">Bagi kamu yang menargetkan sekolah swasta internasional, sertifikat TOEFL EPT kampus dengan biaya murah umumnya tidak cukup.</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><strong>TOEFL iBT (Internet-based Test):</strong> Diselenggarakan resmi oleh ETS. Skor yang umumnya aman untuk melamar guru kelas adalah minimal 80-90. Biayanya memang cukup tinggi (sekitar 3 jutaan), namun sepadan dengan potensi penghasilan yang lebih besar ke depannya.</li>
+                        <li><strong>IELTS (Academic):</strong> Diselenggarakan oleh IDP/British Council. Rata-rata sekolah internasional meminta band skor 6.5 atau 7.0. Fokuskan latihan pada bagian Speaking dan Writing.</li>
+                    </ul>
+                `
+            }
+        };
+
+        function openModal(tipId) {
+            const modal = document.getElementById('article-modal');
+            const backdrop = document.getElementById('modal-backdrop');
+            const panel = document.getElementById('modal-panel');
+            const data = tipsData[tipId];
+
+            if(!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-body').innerHTML = data.content;
+            
+            const tagEl = document.getElementById('modal-tag');
+            tagEl.innerText = data.tag;
+            tagEl.className = "text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest " + data.tagColor;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+                panel.classList.remove('opacity-0', 'scale-95');
+                panel.classList.add('opacity-100', 'scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('article-modal');
+            const backdrop = document.getElementById('modal-backdrop');
+            const panel = document.getElementById('modal-panel');
+
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            panel.classList.remove('opacity-100', 'scale-100');
+            panel.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        function openResourceModal(resId) {
+            const modal = document.getElementById('resource-modal');
+            const backdrop = document.getElementById('resource-backdrop');
+            const panel = document.getElementById('resource-panel');
+            const data = resourceDetails[resId];
+
+            if(!data) return;
+
+            document.getElementById('resource-modal-title').innerText = data.title;
+            document.getElementById('resource-modal-body').innerHTML = data.content;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+                panel.classList.remove('opacity-0', 'scale-95');
+                panel.classList.add('opacity-100', 'scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResourceModal() {
+            const modal = document.getElementById('resource-modal');
+            const backdrop = document.getElementById('resource-backdrop');
+            const panel = document.getElementById('resource-panel');
+
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            panel.classList.remove('opacity-100', 'scale-100');
+            panel.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // --- AI CHATBOT LOGIC ---
+        marked.setOptions({ breaks: true, gfm: true });
+
+// --- KONFIGURASI ASISTEN AI ---
+        const SERVER_API_URL = "/api/chat";
+        const REQUEST_TIMEOUT_MS = 25000;   // batas waktu tunggu respons server
+        const MAX_INPUT_CHARS = 500;        // batas panjang pertanyaan
+        const MAX_HISTORY_MESSAGES = 8;     // jumlah pesan terakhir yang dikirim sebagai konteks
+        const COOLDOWN_MS = 2000;           // jeda antar pengiriman
+        const AI_DISCLAIMER = "*Jawaban AI dapat keliru. Selalu cek kembali ke situs resmi (misalnya sscasn.bkn.go.id).*";
+
+        let chatMemory = [];      // riwayat percakapan: {role: 'user' | 'model', text}
+        let isSending = false;
+        let cooldownUntil = 0;
+
+        function getAiErrorMessage(reason) {
+            const topik = "Kamu masih bisa bertanya seputar jadwal CPNS/PPPK, Info GTK, PPG/Serdik, dan sekolah internasional, atau membaca informasi lengkap pada halaman di atas.";
+            if (reason === 'http_400' || reason === 'http_401' || reason === 'http_403') {
+                return "Maaf, fitur tanya jawab bebas belum dapat diakses karena kunci akses layanan AI di server belum terpasang atau tidak valid. " + topik;
+            }
+            if (reason === 'http_404') {
+                return "Maaf, model AI yang digunakan saat ini tidak tersedia sehingga pertanyaanmu belum dapat dijawab. " + topik;
+            }
+            if (reason === 'http_429') {
+                return "Maaf, batas penggunaan layanan AI sedang tercapai. Silakan coba lagi beberapa saat lagi. " + topik;
+            }
+            if (reason === 'timeout') {
+                return "Maaf, layanan AI terlalu lama merespons. Silakan coba lagi dengan pertanyaan yang lebih singkat. " + topik;
+            }
+            if (reason === 'network') {
+                return "Maaf, website tidak dapat terhubung ke layanan AI. Periksa koneksi internetmu lalu coba lagi. " + topik;
+            }
+            return "Maaf, layanan AI belum dapat menjawab pertanyaanmu saat ini. " + topik;
+        }
+
+        function getKeywordAnswer(lower) {
+            if (lower.includes('gtk') || lower.includes('info gtk') || lower.includes('validasi ijazah')) {
+                return "Berikut langkah untuk memeriksa validitas ijazah PGSD kamu agar aman saat mendaftar CASN:\n\n1. Buka situs resmi **info.gtk.kemdikbud.go.id**\n2. Login menggunakan akun PTK yang telah didaftarkan operator Dapodik sekolah kamu.\n3. Masuk ke menu **Verval Ijazah**.\n4. Pastikan statusnya sudah *Selesai* dan sinkron dengan data PDDikti kampusmu. Jika ada kendala, silakan hubungi operator sekolah.";
+            } else if (lower.includes('pppk') || lower.includes('cpns') || lower.includes('jadwal')) {
+                return "Berdasarkan tren sebelumnya, pembukaan pendaftaran seleksi CASN (CPNS/PPPK) Guru biasanya berlangsung pada pertengahan tahun (sekitar **Juli-Oktober**). Untuk informasi resmi, pantau terus akun IG **@bkngoidofficial** atau situs **sscasn.bkn.go.id**. Mulai persiapkan materi SKD dan latihan soal pedagogik dari sekarang.";
+            } else if (lower.includes('internasional') || lower.includes('swasta') || lower.includes('cambridge')) {
+                return "Untuk mengincar sekolah internasional (SPK), berikut bekal yang perlu kamu siapkan:\n- Skor **TOEFL iBT** (min. 80) atau **IELTS** (min. 6.5).\n- Pemahaman kurikulum internasional seperti **Cambridge** atau **IB (International Baccalaureate)**.\n- Kemampuan *microteaching* yang komunikatif menggunakan metode *Inquiry-Based Learning* (murid aktif, bukan guru yang mendominasi).";
+            } else if (lower.includes('serdik') || lower.includes('ppg') || lower.includes('sertifikat pendidik')) {
+                return "Memiliki **Sertifikat Pendidik (Serdik)** dari program **PPG Prajabatan** memberi keuntungan besar. Saat mendaftar CPNS nanti, nilai tes SKB kamu otomatis mendapat **skor maksimal 100**. Serdik ini juga menjadi syarat mutlak untuk mendapatkan Tunjangan Profesi Guru (TPG). Karena itu, setelah lulus S1 disarankan untuk segera mendaftar PPG.";
+            }
+            return "";
+        }
+
+        let purifyHookAdded = false;
+        function renderSafe(markdownText) {
+            if (typeof DOMPurify !== 'undefined') {
+                if (!purifyHookAdded) {
+                    DOMPurify.addHook('afterSanitizeAttributes', function (node) {
+                        if (node.tagName === 'A') {
+                            node.setAttribute('target', '_blank');
+                            node.setAttribute('rel', 'noopener noreferrer');
+                        }
+                    });
+                    purifyHookAdded = true;
+                }
+                return DOMPurify.sanitize(marked.parse(markdownText));
+            }
+            return markdownText.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/\n/g, '<br>');
+        }
+
+        async function askGemini(userText) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+            try {
+                const response = await fetch(SERVER_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        userText: userText,
+                        history: chatMemory.slice(-MAX_HISTORY_MESSAGES)
+                    }),
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    return { ok: false, reason: "http_" + response.status };
+                }
+
+                return await response.json();
+            } catch (err) {
+                return {
+                    ok: false,
+                    reason: err && err.name === "AbortError" ? "timeout" : "network"
+                };
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+        async function sendToGemini() {
+            if (isSending || Date.now() < cooldownUntil) return;
+
+            const inputEl = document.getElementById('ai-user-input');
+            const sendBtn = document.getElementById('ai-send-btn');
+            let userText = inputEl.value.trim();
+
+            if (!userText) return;
+            userText = userText.slice(0, MAX_INPUT_CHARS);
+
+            isSending = true;
+            appendMessage('user', userText);
+            inputEl.value = '';
+            inputEl.style.height = ''; 
+            inputEl.disabled = true;
+            sendBtn.disabled = true;
+
+            const loadingId = appendLoading();
+
+            try {
+                let success = false;
+                let errorReason = "";
+                let aiResponseText = "";
+
+                try {
+                    const result = await askGemini(userText);
+                    if (result.ok) {
+                        aiResponseText = result.text;
+                        if (result.sumber) aiResponseText += '\n\n**Sumber:**\n' + result.sumber;
+                        if (result.noSearch) aiResponseText += '\n\n*Catatan: jawaban ini tidak memakai pencarian web terbaru, sehingga informasinya mungkin belum mutakhir.*';
+                        aiResponseText += '\n\n' + AI_DISCLAIMER;
+                        success = true;
+
+                        // Simpan ke riwayat percakapan (teks jawaban saja, dipangkas agar hemat kuota)
+                        chatMemory.push({ role: 'user', text: userText });
+                        chatMemory.push({ role: 'model', text: result.text.slice(0, 1500) });
+                        if (chatMemory.length > MAX_HISTORY_MESSAGES * 2) chatMemory = chatMemory.slice(-MAX_HISTORY_MESSAGES);
+                    } else {
+                        errorReason = result.reason;
+                    }
+                } catch (apiError) {
+                    console.error(apiError);
+                    errorReason = 'network';
+                }
+
+                // Cadangan: jawaban bawaan berbasis kata kunci, bila AI tidak dapat diakses
+                if (!success) {
+                    const cadangan = getKeywordAnswer(userText.toLowerCase());
+                    if (cadangan) {
+                        aiResponseText = cadangan + "\n\n*Catatan: jawaban ini berasal dari panduan bawaan website karena layanan AI sedang tidak dapat diakses, sehingga belum tentu mencerminkan informasi terbaru.*";
+                    } else {
+                        aiResponseText = getAiErrorMessage(errorReason);
+                    }
+                }
+
+                removeLoading(loadingId);
+                appendMessage('ai', renderSafe(aiResponseText));
+
+            } catch (error) {
+                console.error(error);
+                removeLoading(loadingId);
+                appendMessage('ai', `<p class="text-slate-700 font-medium">${getAiErrorMessage('network')}</p>`);
+            } finally {
+                isSending = false;
+                inputEl.disabled = false;
+                cooldownUntil = Date.now() + COOLDOWN_MS;
+                setTimeout(() => { sendBtn.disabled = false; }, COOLDOWN_MS);
+                inputEl.focus();
+            }
+        }
+
+        // Pengaturan kolom input: batas panjang dan tombol Enter (Shift+Enter = baris baru).
+        // Di layar sentuh (ponsel), Enter tetap membuat baris baru.
+        (function initChatInput() {
+            const el = document.getElementById('ai-user-input');
+            if (!el) return;
+            el.maxLength = MAX_INPUT_CHARS;
+            el.addEventListener('keydown', function (e) {
+                const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+                if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !isTouch) {
+                    e.preventDefault();
+                    sendToGemini();
+                }
+            });
+        })();
+
+
+        function appendMessage(role, htmlContent) {
+            const chatHistory = document.getElementById('ai-chat-history');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex gap-3 md:gap-4 fade-in appear w-full';
+            
+            if (role === 'user') {
+                msgDiv.classList.add('flex-row-reverse');
+                msgDiv.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                        <i class="fa-solid fa-user text-slate-400 text-sm"></i>
+                    </div>
+                    <div class="bg-sky-500 text-white p-4 rounded-[1.5rem] rounded-tr-none shadow-sm text-sm md:text-base max-w-[85%] md:max-w-[75%] break-words font-medium">
+                        ${htmlContent.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                    </div>
+                `;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center flex-shrink-0 text-white shadow-sm mt-1 border border-white">
+                        <i class="fa-solid fa-robot text-sm"></i>
+                    </div>
+                    <div class="bg-white p-5 rounded-[1.5rem] rounded-tl-none border border-slate-200 shadow-sm text-slate-700 text-sm md:text-base max-w-[90%] md:max-w-[80%] leading-relaxed prose prose-sm md:prose-base prose-blue max-w-none font-medium">
+                        ${htmlContent}
+                    </div>
+                `;
+            }
+            chatHistory.appendChild(msgDiv);
+            
+            setTimeout(() => {
+                chatHistory.scrollTo({ top: chatHistory.scrollHeight, behavior: 'smooth' });
+            }, 50);
+        }
+
+        function appendLoading() {
+            const chatHistory = document.getElementById('ai-chat-history');
+            const id = 'loading-' + Date.now();
+            const msgDiv = document.createElement('div');
+            msgDiv.id = id;
+            msgDiv.className = 'flex gap-3 md:gap-4 w-full';
+            msgDiv.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 text-slate-400 shadow-sm mt-1 border border-white">
+                    <i class="fa-solid fa-robot text-sm"></i>
+                </div>
+                <div class="bg-white p-4 rounded-[1.5rem] rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-2 max-w-max">
+                    <div class="flex items-center gap-1.5 px-2 py-1">
+                        <span class="w-2.5 h-2.5 bg-sky-500 rounded-full animate-bounce"></span>
+                        <span class="w-2.5 h-2.5 bg-sky-500 rounded-full animate-bounce" style="animation-delay: 0.15s"></span>
+                        <span class="w-2.5 h-2.5 bg-sky-500 rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                    </div>
+                    <span class="text-xs text-slate-400 font-bold ml-1 font-display tracking-wide">Sedang mengetik...</span>
+                </div>
+            `;
+            chatHistory.appendChild(msgDiv);
+            chatHistory.scrollTo({ top: chatHistory.scrollHeight, behavior: 'smooth' });
+            return id;
+        }
+
+        function removeLoading(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+</html>
