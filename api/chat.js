@@ -2,6 +2,76 @@ import { GoogleGenAI } from '@google/genai';
 
 const SYSTEM_PROMPT = `Kamu adalah Asisten AI PathTeacher, pemandu karier khusus mahasiswa dan lulusan Pendidikan Guru Sekolah Dasar (PGSD) di Indonesia. Jawablah dengan ramah, jelas, terstruktur, dan praktis seputar jalur karier guru SD (CPNS, PPPK, PPG, guru sekolah swasta/internasional SPK), Kurikulum Merdeka, microteaching, serta tugas wali kelas SD.`;
 
+function extractUserMessage(body) {
+  if (!body) return '';
+  if (typeof body === 'string') {
+    const trimmed = body.trim();
+    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+      try {
+        return extractUserMessage(JSON.parse(trimmed));
+      } catch {
+        return trimmed;
+      }
+    }
+    return trimmed;
+  }
+  if (Array.isArray(body)) {
+    for (let i = body.length - 1; i >= 0; i--) {
+      const item = body[i];
+      if (item && typeof item === 'object' && item.role === 'system') continue;
+      const found = extractUserMessage(item);
+      if (found) return found;
+    }
+    return '';
+  }
+  if (typeof body === 'object') {
+    const priorityKeys = [
+      'message', 'text', 'prompt', 'question', 'query', 'input',
+      'pertanyaan', 'pesan', 'userMessage', 'msg', 'chat', 'content'
+    ];
+    for (const key of priorityKeys) {
+      if (typeof body[key] === 'string' && body[key].trim()) {
+        return body[key].trim();
+      }
+    }
+    if (Array.isArray(body.messages)) {
+      const found = extractUserMessage(body.messages);
+      if (found) return found;
+    }
+    if (Array.isArray(body.contents)) {
+      const found = extractUserMessage(body.contents);
+      if (found) return found;
+    }
+    if (Array.isArray(body.parts)) {
+      const found = extractUserMessage(body.parts);
+      if (found) return found;
+    }
+    const ignoredKeys = new Set(['role', 'model', 'type', 'id', 'sessionId', 'history']);
+    for (const [key, val] of Object.entries(body)) {
+      if (ignoredKeys.has(key)) continue;
+      const found = extractUserMessage(val);
+      if (found) return found;
+    }
+  }
+  return '';
+}
+
+function sendSuccess(res, reply) {
+  return res.status(200).json({
+    ok: true,
+    reply,
+    text: reply,
+    answer: reply,
+    response: reply,
+    message: reply,
+    output: reply,
+    result: reply,
+    content: reply,
+    choices: [{ message: { role: 'assistant', content: reply } }],
+    candidates: [{ content: { parts: [{ text: reply }] } }]
+  });
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -13,20 +83,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const userMessage = (
-      body.message ||
-      body.prompt ||
-      body.question ||
-      (Array.isArray(body.messages) ? body.messages[body.messages.length - 1]?.content : '') ||
-      ''
-    ).trim();
+    const userMessage = extractUserMessage(req.body);
 
     if (!userMessage) {
       return res.status(400).json({ ok: false, reason: 'empty_message' });
     }
 
-    // 1. Jika GROQ_API_KEY terpasang di Vercel, gunakan Groq (gratis & tanpa kartu kredit)
+    // 1. Prioritaskan GROQ_API_KEY jika terpasang di Vercel
     const groqKey = (process.env.GROQ_API_KEY || '').trim();
     if (groqKey) {
       const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -55,10 +118,10 @@ export default async function handler(req, res) {
       }
 
       const reply = groqData.choices?.[0]?.message?.content || 'Maaf, tidak ada jawaban.';
-      return res.status(200).json({ ok: true, reply, text: reply, answer: reply });
+      return sendSuccess(res, reply);
     }
 
-    // 2. Jika memakai GEMINI_API_KEY (mendukung kunci AQ. Vertex Express & AIzaSy)
+    // 2. Cadangan menggunakan GEMINI_API_KEY
     const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
     if (!geminiKey) {
       return res.status(500).json({ ok: false, reason: 'missing_api_key' });
@@ -81,7 +144,7 @@ export default async function handler(req, res) {
         });
 
         const reply = response.text || 'Maaf, tidak ada respons dari AI.';
-        return res.status(200).json({ ok: true, reply, text: reply, answer: reply });
+        return sendSuccess(res, reply);
       } catch (err) {
         lastError = err;
       }
